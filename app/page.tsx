@@ -263,9 +263,10 @@ export default function TurkizLuxury() {
         
         <div className="relative z-20 max-w-[90rem] mx-auto w-full flex flex-col items-center text-center gap-6">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="flex flex-col items-center">
-            <motion.div variants={fadeUpReveal} className="flex items-center gap-4 mb-6 md:mb-8">
+            <motion.div variants={fadeUpReveal} className="flex items-center justify-center gap-4 mb-6 md:mb-8 w-full px-4 md:px-0">
               <div className="hidden md:block w-12 h-[1px] bg-[#D4AF37]"></div>
-              <p className="text-[#D4AF37] text-[11px] md:text-[13px] font-sans tracking-[0.3em] md:tracking-[0.4em] uppercase font-semibold drop-shadow-md text-center whitespace-nowrap">
+              {/* JAVÍTVA: Mobilon kisebb (9px) betűméret, kisebb betűköz (0.2em), és engedélyezett sortörés */}
+              <p className="text-[#D4AF37] text-[9px] sm:text-[11px] md:text-[13px] font-sans tracking-[0.2em] sm:tracking-[0.3em] md:tracking-[0.4em] uppercase font-semibold drop-shadow-md text-center whitespace-normal md:whitespace-nowrap max-w-[90%] md:max-w-none leading-relaxed">
                 {t.hero.sub}
               </p>
               <div className="hidden md:block w-12 h-[1px] bg-[#D4AF37]"></div>
