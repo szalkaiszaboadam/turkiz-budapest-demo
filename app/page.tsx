@@ -118,8 +118,9 @@ const TurkizLogo = ({ isWhite = false, isScrolled = false }: { isWhite?: boolean
   return (
     <div className={`relative w-full h-full flex items-center justify-center transition-all duration-700 ${isWhite ? "brightness-0 invert drop-shadow-[0_2px_10px_rgba(0,0,0,0.2)]" : ""}`}>
       
+      {/* TELJES LOGÓ (Szöveggel) - Gyors 300ms eltűnés és felfelé húzódás görgetéskor */}
       <svg 
-        className={`absolute w-full h-full transition-all duration-700 ease-[0.22,1,0.36,1] origin-top ${isScrolled ? "opacity-0 scale-95 pointer-events-none" : "opacity-100 scale-100"}`}
+        className={`absolute w-full h-full origin-top transition-all ${isScrolled ? "opacity-0 scale-90 -translate-y-4 duration-300 pointer-events-none" : "opacity-100 scale-100 translate-y-0 duration-700 ease-[0.22,1,0.36,1]"}`}
         viewBox="0 0 190.58 260.84" 
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -146,8 +147,9 @@ const TurkizLogo = ({ isWhite = false, isScrolled = false }: { isWhite?: boolean
         <rect fill="currentColor" x="43.95" y="187.59" width="5.62" height="5.62" transform="translate(-120.94 88.83) rotate(-45)" className={isWhite ? "text-white" : "text-[#577285]"}></rect>
       </svg>
 
+      {/* CSAK IKON LOGÓ (Szöveg nélkül) */}
       <svg 
-        className={`absolute w-[130%] h-[130%] -top-[15%] transition-all duration-700 ease-[0.22,1,0.36,1] origin-center ${isScrolled ? "opacity-100 scale-100" : "opacity-0 scale-105 pointer-events-none"}`}
+        className={`absolute w-[130%] h-[130%] -top-[15%] origin-center transition-all ${isScrolled ? "opacity-100 scale-100 duration-700 ease-[0.22,1,0.36,1]" : "opacity-0 scale-110 duration-300 pointer-events-none"}`}
         viewBox="0 0 190.58 180" 
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -223,25 +225,29 @@ export default function TurkizLuxury() {
         html { scroll-behavior: smooth; }
       `}} />
 
-      {/* --- NAVBAR --- */}
-      <nav className={`fixed w-full z-50 transition-all duration-700 ease-[0.22,1,0.36,1] ${isScrolled ? "py-4 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border-none" : "py-6 bg-gradient-to-b from-black/60 to-transparent"}`}>
+{/* --- NAVBAR --- */}
+      <nav className={`fixed w-full z-50 transition-all duration-700 ease-[0.22,1,0.36,1] ${isScrolled ? "py-4 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border-none" : "py-6 bg-gradient-to-b from-black/80 via-black/40 to-transparent"}`}>
         <div className="relative z-10 max-w-[90rem] mx-auto px-6 lg:px-12 flex justify-center md:justify-between items-center">
           
-          <div className="hidden md:flex space-x-12 text-[13px] md:text-[14px] font-sans tracking-[0.15em] uppercase">
+          {/* Bal menü (FLEX-1 a tökéletes szélre igazításhoz) */}
+          <div className="hidden md:flex flex-1 justify-start space-x-8 lg:space-x-12 text-[13px] md:text-[14px] font-sans tracking-[0.15em] uppercase">
             <a href="#about" className={`transition-colors ${isScrolled ? "text-[#577285] hover:text-[#62B6C7]" : "text-white/90 hover:text-white"}`}>{t.nav.gastro}</a>
             <a href="#menu" className={`transition-colors ${isScrolled ? "text-[#577285] hover:text-[#62B6C7]" : "text-white/90 hover:text-white"}`}>{t.nav.menu}</a>
           </div>
 
-          <div className={`relative z-50 transition-all duration-700 ease-[0.22,1,0.36,1] flex items-center justify-center cursor-pointer ${isScrolled ? "w-10 h-10 md:w-12 md:h-12" : "w-24 h-32 md:w-28 md:h-36"}`}>
+          {/* KÖZÉPSŐ LOGÓ (FLEX-NONE a tökéletes középponthoz, absolute NÉLKÜL, tiszta magassággal) */}
+          <div className={`relative flex-none transition-all duration-700 ease-[0.22,1,0.36,1] cursor-pointer ${isScrolled ? "w-10 h-10 md:w-12 md:h-12" : "w-[90px] h-[120px] md:w-[110px] md:h-[145px]"}`}>
              <TurkizLogo isWhite={!isScrolled} isScrolled={isScrolled} />
           </div>
 
-          <div className="hidden md:flex space-x-12 text-[13px] md:text-[14px] font-sans tracking-[0.15em] uppercase items-center">
+          {/* Jobb menü (FLEX-1 a tökéletes szélre igazításhoz) */}
+          <div className="hidden md:flex flex-1 justify-end space-x-8 lg:space-x-12 text-[13px] md:text-[14px] font-sans tracking-[0.15em] uppercase items-center">
             <a href="#gallery" className={`transition-colors ${isScrolled ? "text-[#577285] hover:text-[#62B6C7]" : "text-white/90 hover:text-white"}`}>{t.nav.gallery}</a>
             <a href="#reservation" className={`transition-colors duration-300 ${isScrolled ? "text-[#577285] hover:text-[#D4AF37]" : "text-white/90 hover:text-white"}`}>
               {t.nav.res}
             </a>
           </div>
+          
         </div>
       </nav>
 
@@ -412,13 +418,16 @@ export default function TurkizLuxury() {
         </div>
       </section>
 
-      {/* --- KÖZÖS SÖTÉT WRAPPER A CTA-NAK ÉS A FOOTERNEK --- */}
-      <div className="relative w-full text-white bg-[#0B131A] overflow-hidden flex flex-col">
+{/* --- KÖZÖS SÖTÉT WRAPPER A CTA-NAK ÉS A FOOTERNEK --- */}
+      <div className="relative w-full text-white bg-[#1C2A35] overflow-hidden flex flex-col">
         
         {/* Közös háttérkép */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <img src="/uj_turkiz3.jpg" alt="Texture" className="w-full h-full object-cover opacity-15 mix-blend-screen" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0B131A] via-[#0B131A]/60 to-[#0B131A]/95"></div>
+        <div className="absolute inset-0 z-0 pointer-events-none bg-black">
+          {/* Opacity megemelve 30%-ra, a mix-blend-screen levéve, hogy a kép normálisan látszódjon */}
+          <img src="/uj_turkiz3.jpg" alt="Texture" className="w-full h-full object-cover opacity-30" />
+          
+          {/* Középen sokkal átlátszóbb a gradiens, hogy a kép domináljon, a kékes árnyalat is visszavéve */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0B131A]/80 via-black/20 to-black/90"></div>
         </div>
 
         {/* --- LÁTVÁNYOS CALL TO ACTION SZEKCIÓ --- */}
