@@ -118,9 +118,9 @@ const TurkizLogo = ({ isWhite = false, isScrolled = false }: { isWhite?: boolean
   return (
     <div className={`relative w-full h-full flex items-center justify-center transition-all duration-700 ${isWhite ? "brightness-0 invert drop-shadow-[0_2px_10px_rgba(0,0,0,0.2)]" : ""}`}>
       
-      {/* TELJES LOGÓ (Szöveggel) - Gyors 300ms eltűnés és felfelé húzódás görgetéskor */}
+      {/* TELJES LOGÓ (Szöveggel) */}
       <svg 
-        className={`absolute w-full h-full origin-top transition-all ${isScrolled ? "opacity-0 scale-90 -translate-y-4 duration-300 pointer-events-none" : "opacity-100 scale-100 translate-y-0 duration-700 ease-[0.22,1,0.36,1]"}`}
+        className={`absolute inset-0 w-full h-full origin-top transition-all duration-500 ease-in-out ${isScrolled ? "opacity-0 scale-75 pointer-events-none" : "opacity-100 scale-100"}`}
         viewBox="0 0 190.58 260.84" 
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -147,10 +147,10 @@ const TurkizLogo = ({ isWhite = false, isScrolled = false }: { isWhite?: boolean
         <rect fill="currentColor" x="43.95" y="187.59" width="5.62" height="5.62" transform="translate(-120.94 88.83) rotate(-45)" className={isWhite ? "text-white" : "text-[#577285]"}></rect>
       </svg>
 
-      {/* CSAK IKON LOGÓ (Szöveg nélkül) */}
+      {/* CSAK IKON LOGÓ (Szöveg nélkül, pontos ViewBox-al a kis mérethez) */}
       <svg 
-        className={`absolute w-[130%] h-[130%] -top-[15%] origin-center transition-all ${isScrolled ? "opacity-100 scale-100 duration-700 ease-[0.22,1,0.36,1]" : "opacity-0 scale-110 duration-300 pointer-events-none"}`}
-        viewBox="0 0 190.58 180" 
+        className={`absolute inset-0 w-full h-full origin-center transition-all duration-500 ease-in-out ${isScrolled ? "opacity-100 scale-100" : "opacity-0 scale-125 pointer-events-none"}`}
+        viewBox="0 0 190.58 160" 
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
@@ -190,6 +190,7 @@ const staggerContainer: Variants = {
 export default function TurkizLuxury() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [lang, setLang] = useState<Language>("HU");
+  const [isLoading, setIsLoading] = useState(true); // --- PRELOADER STATE ---
   const { scrollY } = useScroll();
 
   const t = translations[lang];
@@ -204,6 +205,27 @@ export default function TurkizLuxury() {
     setLang(newLang);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+// --- PRELOADER EFFECT ÉS SCROLL ---
+  useEffect(() => {
+    // Kényszerített görgetés az oldal tetejére frissítéskor
+    if (typeof window !== "undefined" && window.history && "scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    window.scrollTo(0, 0);
+
+    if (isLoading) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2500); // 2.5 másodperc után tűnik el
+
+    return () => clearTimeout(timer);
+  }, [isLoading]);
 
   return (
     <div className="bg-[#FDFBF7] overflow-x-hidden selection:bg-[#2C3E50] selection:text-white font-sans text-[#2C3E50]">
@@ -225,7 +247,39 @@ export default function TurkizLuxury() {
         html { scroll-behavior: smooth; }
       `}} />
 
-{/* --- NAVBAR --- */}
+{/* --- PRELOADER (BETÖLTŐ KÉPERNYŐ) --- */}
+      <AnimatePresence>
+        {isLoading && (
+          <React.Fragment key="preloader-wrapper">
+            {/* 1. Sötét háttér - EZ fog csak elhalványulni */}
+            <motion.div
+              key="preloader-bg"
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
+              className="fixed inset-0 z-[9998] bg-[#0B131A]"
+            />
+
+            {/* 2. Középső tartalom (Csak a Logó maradt, töltőcsík eltávolítva) */}
+            <div className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none">
+              
+              {/* LOGÓ - Végig erős marad, amíg felúszik */}
+              <motion.div
+                layoutId="main-logo"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+                className="w-[120px] h-[160px] md:w-[150px] md:h-[200px] relative"
+              >
+                <TurkizLogo isWhite={true} isScrolled={false} />
+              </motion.div>
+
+            </div>
+          </React.Fragment>
+        )}
+      </AnimatePresence>
+
+      {/* --- NAVBAR --- */}
       <nav className={`fixed w-full z-50 transition-all duration-700 ease-[0.22,1,0.36,1] ${isScrolled ? "py-4 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border-none" : "py-6 bg-gradient-to-b from-black/80 via-black/40 to-transparent"}`}>
         <div className="relative z-10 max-w-[90rem] mx-auto px-6 lg:px-12 flex justify-center md:justify-between items-center">
           
@@ -235,11 +289,18 @@ export default function TurkizLuxury() {
             <a href="#menu" className={`transition-colors ${isScrolled ? "text-[#577285] hover:text-[#62B6C7]" : "text-white/90 hover:text-white"}`}>{t.nav.menu}</a>
           </div>
 
-          {/* KÖZÉPSŐ LOGÓ (FLEX-NONE a tökéletes középponthoz, absolute NÉLKÜL, tiszta magassággal) */}
+{/* KÖZÉPSŐ LOGÓ (Várja a preloaderből felúszó logót) */}
           <div className={`relative flex-none transition-all duration-700 ease-[0.22,1,0.36,1] cursor-pointer ${isScrolled ? "w-10 h-10 md:w-12 md:h-12" : "w-[90px] h-[120px] md:w-[110px] md:h-[145px]"}`}>
-             <TurkizLogo isWhite={!isScrolled} isScrolled={isScrolled} />
+             {!isLoading && (
+               <motion.div 
+                 layoutId="main-logo" 
+                 transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }} 
+                 className="w-full h-full"
+               >
+                 <TurkizLogo isWhite={!isScrolled} isScrolled={isScrolled} />
+               </motion.div>
+             )}
           </div>
-
           {/* Jobb menü (FLEX-1 a tökéletes szélre igazításhoz) */}
           <div className="hidden md:flex flex-1 justify-end space-x-8 lg:space-x-12 text-[13px] md:text-[14px] font-sans tracking-[0.15em] uppercase items-center">
             <a href="#gallery" className={`transition-colors ${isScrolled ? "text-[#577285] hover:text-[#62B6C7]" : "text-white/90 hover:text-white"}`}>{t.nav.gallery}</a>
@@ -251,21 +312,30 @@ export default function TurkizLuxury() {
         </div>
       </nav>
 
-      {/* --- BŐVÍTETT HERO SECTION --- */}
+{/* --- BŐVÍTETT HERO SECTION --- */}
       <section className="relative h-screen w-full flex flex-col justify-center md:justify-end pb-0 md:pb-24 pt-16 md:pt-0 px-4 lg:px-16 overflow-hidden">
         <div className="absolute inset-0 w-full h-full">
           <div className="absolute inset-0 bg-gradient-to-t from-[#0B131A] via-black/60 to-black/40 z-10" />
+          {/* JAVÍTVA: A háttérkép animációja megvárja az isLoading végét */}
           <motion.img
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5, ease: "easeOut" }}
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: !isLoading ? 1 : 0 }} 
+            transition={{ duration: 1.5, ease: "easeOut" }}
             src="/turkiz1.jpg" alt="TÜRKIZ Restaurant" className="w-full h-full object-cover"
           />
         </div>
         
         <div className="relative z-20 max-w-[90rem] mx-auto w-full flex flex-col items-center text-center gap-6">
-          <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="flex flex-col items-center">
+          {/* JAVÍTVA: A szövegek animációja (animate prop) megvárja az isLoading végét */}
+          <motion.div 
+            initial="hidden" 
+            animate={!isLoading ? "visible" : "hidden"} 
+            variants={staggerContainer} 
+            className="flex flex-col items-center"
+          >
+            
             <motion.div variants={fadeUpReveal} className="flex items-center justify-center gap-4 mb-6 md:mb-8 w-full px-4 md:px-0">
               <div className="hidden md:block w-12 h-[1px] bg-[#D4AF37]"></div>
-              {/* JAVÍTVA: Mobilon kisebb (9px) betűméret, kisebb betűköz (0.2em), és engedélyezett sortörés */}
               <p className="text-[#D4AF37] text-[9px] sm:text-[11px] md:text-[13px] font-sans tracking-[0.2em] sm:tracking-[0.3em] md:tracking-[0.4em] uppercase font-semibold drop-shadow-md text-center whitespace-normal md:whitespace-nowrap max-w-[90%] md:max-w-none leading-relaxed">
                 {t.hero.sub}
               </p>
@@ -419,15 +489,12 @@ export default function TurkizLuxury() {
         </div>
       </section>
 
-{/* --- KÖZÖS SÖTÉT WRAPPER A CTA-NAK ÉS A FOOTERNEK --- */}
-      <div className="relative w-full text-white bg-[#1C2A35] overflow-hidden flex flex-col">
+      {/* --- KÖZÖS SÖTÉT WRAPPER A CTA-NAK ÉS A FOOTERNEK --- */}
+      <div className="relative w-full text-white bg-[#0B131A] overflow-hidden flex flex-col">
         
-        {/* Közös háttérkép */}
+        {/* Közös háttérkép a kért sötétítési beállításokkal */}
         <div className="absolute inset-0 z-0 pointer-events-none bg-black">
-          {/* Opacity megemelve 30%-ra, a mix-blend-screen levéve, hogy a kép normálisan látszódjon */}
           <img src="/uj_turkiz3.jpg" alt="Texture" className="w-full h-full object-cover opacity-30" />
-          
-          {/* Középen sokkal átlátszóbb a gradiens, hogy a kép domináljon, a kékes árnyalat is visszavéve */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#0B131A]/80 via-black/20 to-black/90"></div>
         </div>
 
@@ -456,7 +523,6 @@ export default function TurkizLuxury() {
                     <p className="mb-1">+36 70 366 7666</p>
                     <p>reservation@turkizrestaurant.com</p>
                     
-                    {/* KÖZÖSSÉGI MÉDIA IKONOK ÁTHELYEZVE IDE */}
                     <div className="flex gap-4 mt-4 text-white/60">
                       <a href="#" className="hover:text-[#D4AF37] transition-colors" aria-label="Facebook">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -504,7 +570,6 @@ export default function TurkizLuxury() {
         <footer className="relative z-10 py-8 border-t border-white/10">
           <div className="max-w-[90rem] mx-auto px-6 lg:px-12 flex flex-col lg:flex-row justify-between items-center gap-6 lg:gap-4">
             
-            {/* Bal oldal: Csak Nyelvválasztó */}
             <div className="flex flex-col sm:flex-row items-center gap-4 lg:gap-6 w-full lg:w-auto justify-center lg:justify-start shrink-0">
               <div className="flex gap-3 text-[11px] font-sans tracking-[0.2em] text-white/60">
                 <button 
@@ -522,21 +587,19 @@ export default function TurkizLuxury() {
               </div>
             </div>
 
-            {/* Közép: Jogi Linkek */}
             <div className="flex flex-wrap justify-center gap-4 lg:gap-8 text-[10px] font-sans tracking-[0.2em] uppercase text-white/50 w-full lg:w-auto">
               <a href="#" className="hover:text-white transition-colors whitespace-nowrap">{t.footer.imprint}</a>
               <a href="#" className="hover:text-white transition-colors whitespace-nowrap">{t.footer.cookie}</a>
               <a href="#" className="hover:text-white transition-colors whitespace-nowrap">{t.footer.privacy}</a>
             </div>
             
-            {/* Jobb oldal: Copyright & Sonaweb logóval */}
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6 text-[10px] font-sans tracking-[0.2em] uppercase text-white/40 w-full lg:w-auto justify-center lg:justify-end shrink-0 text-center sm:text-left">
               <p className="whitespace-nowrap">&copy; {new Date().getFullYear()} {t.footer.rights}</p>
               
               <div className="flex items-center gap-2 font-bold tracking-[0.25em] whitespace-nowrap">
                 <span className="text-white/80">{t.footer.madeBy}</span>
                 <img 
-                  src="/sonaweb-logo-white.png" 
+                  src="/sonaweb.png" 
                   alt="Sonaweb" 
                   className="h-[14px] w-auto opacity-80 hover:opacity-100 transition-opacity brightness-0 invert" 
                 />
