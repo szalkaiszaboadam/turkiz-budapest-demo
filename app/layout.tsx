@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TURKIZ BUDAPEST Demo",
+  title: "TÜRKIZ BUDAPEST Demo",
   description: "Készítette a SONAWEB.",
     icons: {
     icon: "/turkiz-favicon.png", // <--- EZT A SORT ADD HOZZÁ
