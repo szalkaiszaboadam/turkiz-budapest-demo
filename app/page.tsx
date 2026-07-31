@@ -47,7 +47,7 @@ export default function DemoSelector() {
           href="/demo-1" 
           className="flex-1 flex flex-col items-center justify-center p-10 md:p-14 lg:p-16 border border-white/20 hover:bg-white hover:text-[#0B131A] transition-colors duration-300 group"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium mb-4">01. Verzió</h2>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium mb-4">1. Verzió</h2>
           <p className="text-[13px] md:text-[15px] lg:text-[17px] tracking-[0.2em] uppercase opacity-70 group-hover:opacity-100 transition-opacity font-semibold">
             Képes Kapcsolat szekció
           </p>
@@ -57,9 +57,19 @@ export default function DemoSelector() {
           href="/demo-2" 
           className="flex-1 flex flex-col items-center justify-center p-10 md:p-14 lg:p-16 border border-white/20 hover:bg-white hover:text-[#0B131A] transition-colors duration-300 group"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium mb-4">02. Verzió</h2>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium mb-4">2. Verzió</h2>
           <p className="text-[13px] md:text-[15px] lg:text-[17px] tracking-[0.2em] uppercase opacity-70 group-hover:opacity-100 transition-opacity font-semibold">
             Képes Rose szekció
+          </p>
+        </a>
+
+        <a 
+          href="/demo-3" 
+          className="flex-1 flex flex-col items-center justify-center p-10 md:p-14 lg:p-16 border border-white/20 hover:bg-white hover:text-[#0B131A] transition-colors duration-300 group"
+        >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium mb-4">3. Verzió</h2>
+          <p className="text-[13px] md:text-[15px] lg:text-[17px] tracking-[0.2em] uppercase opacity-70 group-hover:opacity-100 transition-opacity font-semibold">
+            Türkiz - Rose váltó
           </p>
         </a>
 
