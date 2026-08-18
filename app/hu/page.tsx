@@ -3,37 +3,102 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, Variants, useSpring, useMotionValue } from "framer-motion";
 
-// --- ADATOK ---
+// --- ADATOK STABIL DEMO KÉPEKKEL ---
 const DISHES = [
-  { name: "TÜRKIZ Mix Grill", desc: "Faszénen sült válogatás, autentikus fűszerezésű bárány- és borjúhúsokkal.", img: "/turkiz4.jpg" },
-  { name: "Meze Válogatás", desc: "Klasszikus hideg mezzék: selymes humusz, muhammara, és haydari.", img: "/turkiz2.jpg" },
-  { name: "Adana Kebab", desc: "Klasszikus fűszeres bárány- és borjúdarálthús nyárson.", img: "/uj_turkiz2.jpg" },
-  { name: "Iskender Kebab", desc: "Fűszeres bárányhús vékony pitán, gazdag paradicsomszósszal és olvasztott vajjal.", img: "/uj_turkiz4.jpg" },
-  { name: "Manti", desc: "Anatóliai húsos táskák, fokhagymás joghurttal és fűszeres vajjal nyakon öntve.", img: "/uj_turkiz1.jpg" },
-  { name: "Török Kávé & Lokum", desc: "Hagyományos rézdzsezvában főzött kávé, friss pisztáciás lokummal tálalva.", img: "/turkiz1.jpg" },
-  { name: "Kézműves Baklava", desc: "Házi készítésű ropogós pisztáciás baklava, eredeti maras fagylalttal.", img: "/turkiz3.jpg" }
+  { 
+    name: "TÜRKIZ Mix Grill", 
+    desc: "Faszénen sült válogatás, autentikus fűszerezésű bárány- és borjúhúsokkal.", 
+    info: "Válogatott prémium bárány- és borjúhúsok közvetlenül faszénen sütve, a legfinomabb anatóliai fűszerekkel marinálva. Tradicionális bulgurral és grillezett zöldségekkel tálalva.",
+    img: "https://images.unsplash.com/photo-1544025162-83141f22e863?auto=format&fit=crop&w=800&q=80" 
+  },
+  { 
+    name: "Meze Válogatás", 
+    desc: "Klasszikus hideg mezzék: selymes humusz, muhammara, és haydari.", 
+    info: "Kezdje az utazást a Közel-Keletre ezzel az autentikus hidegtállal. Selymesen lágy humusz, pikáns diós muhammara és frissítő fokhagymás-mentás haydari.",
+    img: "https://images.unsplash.com/photo-1628198595861-c812d1b7d598?auto=format&fit=crop&w=800&q=80" 
+  },
+  { 
+    name: "Adana Kebab", 
+    desc: "Klasszikus fűszeres bárány- és borjúdarálthús nyárson.", 
+    info: "Kézzel vágott, gazdagon fűszerezett bárány- és borjúhús keveréke, melyet széles nyárson, lassan sütünk faszén felett, hogy a szaftok tökéletesen egybeérjenek.",
+    img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" 
+  },
+  { 
+    name: "Iskender Kebab", 
+    desc: "Fűszeres bárányhús vékony pitán, gazdag paradicsomszósszal.", 
+    info: "Bursából származó legendás fogás. Vékonyra szelt, omlós bárányhús, frissen sült pita ágyon, bőséges forró paradicsomszósszal nyakon öntve.",
+    img: "https://images.unsplash.com/photo-1655079862215-68a85703f848?auto=format&fit=crop&w=800&q=80" 
+  },
+  { 
+    name: "Manti", 
+    desc: "Anatóliai húsos táskák, fokhagymás joghurttal és fűszeres vajjal.", 
+    info: "Gondosan, kézzel hajtogatott apró tésztatasakok fűszeres bárányhússal töltve. Hűvös fokhagymás joghurttal és egy csipetnyi mentával ízesített forró vajjal tálalva.",
+    img: "https://images.unsplash.com/photo-1533777324565-a040eb52facd?auto=format&fit=crop&w=800&q=80" 
+  },
+  { 
+    name: "Török Kávé & Lokum", 
+    desc: "Hagyományos rézdzsezvában főzött kávé, pisztáciás lokummal.", 
+    info: "Forró homokon, lassan főzött, sűrű és aromás török kávé, mely mellé kézműves, ropogós pisztáciával töltött tradicionális török édességet (lokum) szolgálunk fel.",
+    img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=800&q=80" 
+  },
+  { 
+    name: "Kézműves Baklava", 
+    desc: "Ropogós pisztáciás baklava, eredeti maras fagylalttal.", 
+    info: "Gaziantepből származó recept alapján. Negyven réteg hajszálvékony tészta, bőséges antepi pisztácia, forró cukorsziruppal és dondurma fagylalttal.",
+    img: "https://images.unsplash.com/photo-1519671282429-b44660ead0a7?auto=format&fit=crop&w=800&q=80" 
+  }
 ];
 
 const MENU_TABS = ["Mezzék", "Főételek", "Desszertek"];
 
 const MENU_CATEGORIES = [
   [
-    { name: "Hummusz Kavurma", desc: "Selymes csicseriborsó püré pirított fűszeres bárányhússal, fenyőmaggal", price: "4 200 Ft", img: "/turkiz1.jpg" },
-    { name: "Muhammara", desc: "Dióval és gránátalmasziruppal gazdagított pikáns sültpaprika-krém", price: "3 500 Ft", img: "/turkiz2.jpg" },
-    { name: "Haydari", desc: "Sűrű fokhagymás joghurt friss kaporral és mentával", price: "3 200 Ft", img: "/uj_turkiz1.jpg" },
-    { name: "Babagannus", desc: "Füstölt padlizsánkrém tahinivel és olívaolajjal", price: "3 600 Ft", img: "/uj_turkiz2.jpg" }
+    { name: "Hummusz Kavurma", desc: "Selymes csicseriborsó püré pirított fűszeres bárányhússal, fenyőmaggal", price: "4 200 Ft", img: "https://images.unsplash.com/photo-1637775297495-2244a04d2077?auto=format&fit=crop&w=800&q=80" },
+    { name: "Muhammara", desc: "Dióval és gránátalmasziruppal gazdagított pikáns sültpaprika-krém", price: "3 500 Ft", img: "https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=800&q=80" },
+    { name: "Haydari", desc: "Sűrű fokhagymás joghurt friss kaporral és mentával", price: "3 200 Ft", img: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80" },
+    { name: "Babagannus", desc: "Füstölt padlizsánkrém tahinivel és olívaolajjal", price: "3 600 Ft", img: "https://images.unsplash.com/photo-1572350727142-6e2eb9036f01?auto=format&fit=crop&w=800&q=80" }
   ],
   [
-    { name: "Adana Kebab", desc: "Faszénen sült, klasszikus fűszeres bárány- és borjúdarálthús nyárson", price: "7 900 Ft", img: "/turkiz4.jpg" },
-    { name: "Kuzu Sis", desc: "Pácolt, faszénen sült bárányhús kockák, bulgurral és grillezett zöldségekkel", price: "8 500 Ft", img: "/uj_turkiz4.jpg" },
-    { name: "Tavuk Sis", desc: "Fűszeres joghurtban pácolt csirkemell nyárs", price: "6 500 Ft", img: "/vendeg1.jpg" },
-    { name: "Türkiz Mix Grill", desc: "Hatalmas hústál 2 főre: Adana, bárány és csirke nyársak, bárányborda", price: "18 900 Ft", img: "/turkiz3.jpg" }
+    { name: "Adana Kebab", desc: "Faszénen sült, klasszikus fűszeres bárány- és borjúdarálthús nyárson", price: "7 900 Ft", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" },
+    { name: "Kuzu Sis", desc: "Pácolt, faszénen sült bárányhús kockák, bulgurral és grillezett zöldségekkel", price: "8 500 Ft", img: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?auto=format&fit=crop&w=800&q=80" },
+    { name: "Tavuk Sis", desc: "Fűszeres joghurtban pácolt csirkemell nyárs", price: "6 500 Ft", img: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=800&q=80" },
+    { name: "Türkiz Mix Grill", desc: "Hatalmas hústál 2 főre: Adana, bárány és csirke nyársak, bárányborda", price: "18 900 Ft", img: "https://images.unsplash.com/photo-1544025162-83141f22e863?auto=format&fit=crop&w=800&q=80" }
   ],
   [
-    { name: "Türkiz Baklava", desc: "Házi készítésű ropogós pisztáciás baklava, eredeti maras fagylalttal", price: "3 800 Ft", img: "/vendeg2.jpg" },
-    { name: "Sütlaç", desc: "Hagyományos kemencében sült török rizspuding", price: "3 200 Ft", img: "/vendeg3.jpg" },
-    { name: "Künefe", desc: "Édes sajtos desszert ropogós kadayif tésztában, pisztáciával", price: "3 500 Ft", img: "/vendeg4.jpg" }
+    { name: "Türkiz Baklava", desc: "Házi készítésű ropogós pisztáciás baklava, eredeti maras fagylalttal", price: "3 800 Ft", img: "https://images.unsplash.com/photo-1519671282429-b44660ead0a7?auto=format&fit=crop&w=800&q=80" },
+    { name: "Sütlaç", desc: "Hagyományos kemencében sült török rizspuding", price: "3 200 Ft", img: "https://images.unsplash.com/photo-1626002047814-722137910972?auto=format&fit=crop&w=800&q=80" },
+    { name: "Künefe", desc: "Édes sajtos desszert ropogós kadayif tésztában, pisztáciával", price: "3 500 Ft", img: "https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80" }
   ]
+];
+
+const EVENTS = [
+  {
+    title: "Élőzenei Akusztikus Est",
+    year: "2026",
+    month: "AUG",
+    day: "14",
+    time: "Minden Pénteken 19:00",
+    desc: "Lazuljon el a hét végén kellemes, élő akusztikus gitárzene és mediterrán atmoszféra mellett.",
+    img: "/turkiz2.jpg"
+  },
+  {
+    title: "Foci Közvetítés Élőben",
+    year: "2026",
+    month: "AUG",
+    day: "22",
+    time: "Kiemelt Meccsnapokon 18:00",
+    desc: "Szurkoljon kedvenc csapatának óriáskivetítőn, jéghideg csapolt sörök és fergeteges hangulat kíséretében.",
+    img: "/turkiz1.jpg"
+  },
+  {
+    title: "Török Kulináris Hétvége",
+    year: "2026",
+    month: "AUG",
+    day: "29",
+    time: "Péntektől Vasárnapig",
+    desc: "Séfünk különleges menüvel készül, amely Törökország rejtett régióinak legkiválóbb ízeit mutatja be.",
+    img: "/turkiz3.jpg"
+  }
 ];
 
 const REVIEWS = [
@@ -46,8 +111,8 @@ const REVIEWS = [
 
 const OPENING_DAYS = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"];
 
-// --- VIP KÉPEK PONTOSAN 7 DARAB ---
-const VIP_IMAGES = [1, 2, 3, 4, 5, 6, 7];
+// PONTOSAN 8 KÉP A GRIDHEZ
+const VIP_IMAGES = [1, 2, 3, 4, 5, 6, 7, 8];
 
 // --- PONTOSAN IGAZÍTOTT MORFÓZIS LOGÓ KOMPONENS ---
 const TurkizLogo = ({ isWhite = false, isScrolled = false }: { isWhite?: boolean; isScrolled?: boolean }) => {
@@ -115,7 +180,7 @@ const staggerContainer: Variants = {
   visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.6 } }
 };
 
-// --- CURSOR FOLLOW KOMPONENS A MENÜHÖZ ---
+// --- CURSOR FOLLOW KOMPONENS A SÖTÉT MENÜHÖZ ---
 const HoverImageItem = ({ item }: { item: any }) => {
   const [isHovered, setIsHovered] = useState(false);
   const x = useMotionValue(0);
@@ -138,13 +203,13 @@ const HoverImageItem = ({ item }: { item: any }) => {
     <div 
       onMouseEnter={() => setIsHovered(true)} 
       onMouseLeave={() => setIsHovered(false)}
-      className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-white/10 pb-4 group cursor-pointer relative"
+      className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-white/10 py-5 md:py-6 group cursor-pointer relative transition-colors duration-300 hover:border-white/30"
     >
       <div className="flex-1 pr-0 md:pr-6 mb-2 md:mb-0">
         <h3 className="font-serif text-xl md:text-2xl text-white mb-2 group-hover:text-[#62B6C7] transition-colors duration-300">{item.name}</h3>
-        <p className="font-sans text-white/60 text-[13px] md:text-[14px] leading-relaxed">{item.desc}</p>
+        <p className="font-sans text-white/60 text-[13px] md:text-[14px] leading-relaxed max-w-xl">{item.desc}</p>
       </div>
-      <div className="text-white font-sans font-bold tracking-[0.1em] text-[18px] md:text-[20px] whitespace-nowrap mt-2 md:mt-0">
+      <div className="text-[#62B6C7] font-sans font-bold tracking-[0.1em] text-[18px] md:text-[20px] whitespace-nowrap mt-2 md:mt-0">
         {item.price}
       </div>
 
@@ -158,7 +223,7 @@ const HoverImageItem = ({ item }: { item: any }) => {
             style={{ left: xSpring, top: ySpring, x: "-50%", y: "-50%" }}
             src={item.img}
             alt={item.name}
-            className="fixed w-[280px] h-[360px] object-cover z-[9999] pointer-events-none drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] border border-white/10 hidden md:block"
+            className="fixed w-[280px] h-[360px] object-cover z-[9999] pointer-events-none drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] border border-white/20 hidden md:block"
           />
         )}
       </AnimatePresence>
@@ -174,13 +239,12 @@ export default function TurkizLuxury() {
   const [showStickyBtn, setShowStickyBtn] = useState(false);
   const [scrollRange, setScrollRange] = useState(0);
   
-  const [activeDot, setActiveDot] = useState(0);
-  const vipScrollRef = useRef<HTMLDivElement>(null);
+  const [activeEvent, setActiveEvent] = useState(0);
 
   const { scrollY } = useScroll();
   const heroBgY = useTransform(scrollY, [0, 1000], ["0%", "20%"]);
 
-  // HORIZONTAL SCROLL DINAMIKUS MÉRÉSSEL ÉS VAJPUHA "RUGÓVAL"
+  // HORIZONTAL SCROLL DINAMIKUS MÉRÉSSEL
   const horizontalRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
 
@@ -201,7 +265,6 @@ export default function TurkizLuxury() {
     offset: ["start start", "end end"]
   });
   
-  // Feszesebb rugó: vajpuha görgetés, de nincs lemaradás a végén
   const smoothHorizontalProgress = useSpring(horizontalProgress, {
     stiffness: 300,
     damping: 30,
@@ -229,26 +292,9 @@ export default function TurkizLuxury() {
       }
 
       const shouldShow = latest > heroHeight && !hideAtBottom;
-      setShowStickyBtn((prev) => (prev !== shouldShow ? shouldShow : prev));
+      setShowStickyBtn((prev) => (prev !== shouldShow ? scheduleShow : prev));
     }
   });
-
-  const handleVipScroll = () => {
-    if (vipScrollRef.current) {
-      const scrollLeft = vipScrollRef.current.scrollLeft;
-      const itemWidth = vipScrollRef.current.scrollWidth / VIP_IMAGES.length;
-      const dotIndex = Math.round(scrollLeft / itemWidth);
-      setActiveDot(Math.min(Math.max(dotIndex, 0), VIP_IMAGES.length - 1));
-    }
-  };
-
-  const handleDotClick = (index: number) => {
-    if (vipScrollRef.current) {
-      const itemWidth = vipScrollRef.current.scrollWidth / VIP_IMAGES.length;
-      vipScrollRef.current.scrollTo({ left: index * itemWidth, behavior: 'smooth' });
-      setActiveDot(index);
-    }
-  };
 
   // --- PRELOADER ---
   useEffect(() => {
@@ -273,26 +319,6 @@ export default function TurkizLuxury() {
   return (
     <div className="bg-white overflow-x-clip selection:bg-[#2C3E50] selection:text-white font-sans text-[#2C3E50]">
       
-      {/* --- STICKY ASZTALFOGLALÁS GOMB (Minimalista beúszás, tökéletes közép) --- */}
-      <AnimatePresence>
-        {showStickyBtn && (
-          <motion.a 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 15 }}
-            transition={{ duration: 0.2 }}
-            href="#reservation" 
-            className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[9999] w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#62B6C7] text-white hover:bg-[#2C3E50] transition-colors duration-300 cursor-pointer block shadow-md"
-          >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg className="w-6 h-6 md:w-6 md:h-6 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-            </div>
-          </motion.a>
-        )}
-      </AnimatePresence>
-
       {/* --- STÍLUSOK (Work Sans + Cormorant) --- */}
       <style dangerouslySetInnerHTML={{__html: `
         @import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Work+Sans:wght@300;400;500;600&display=swap');
@@ -314,7 +340,27 @@ export default function TurkizLuxury() {
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}} />
 
-      {/* --- PRELOADER (A logó nem villog, csak finoman elhalványul) --- */}
+      {/* --- STICKY ASZTALFOGLALÁS GOMB --- */}
+      <AnimatePresence>
+        {showStickyBtn && (
+          <motion.a 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 15 }}
+            transition={{ duration: 0.2 }}
+            href="#reservation" 
+            className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[9999] w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#62B6C7] text-white hover:bg-[#2C3E50] transition-colors duration-300 cursor-pointer block shadow-md"
+          >
+            <div className="absolute inset-0 flex items-center justify-center">
+              <svg className="w-6 h-6 md:w-6 md:h-6 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+          </motion.a>
+        )}
+      </AnimatePresence>
+
+      {/* --- PRELOADER --- */}
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -381,13 +427,15 @@ export default function TurkizLuxury() {
           <div className="flex-1 md:hidden"></div>
 
           <div className={`relative flex-none transition-all duration-700 ease-[0.22,1,0.36,1] cursor-pointer flex items-center justify-center ${isScrolled ? "w-[55px] h-[55px] md:w-[65px] md:h-[65px]" : "w-[90px] h-[120px] md:w-[110px] md:h-[145px]"}`}>
-             <motion.div 
-               layoutId="main-logo" 
-               transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-               className="w-full h-full flex items-center justify-center"
-             >
-               <TurkizLogo isWhite={!isScrolled || isMobileMenuOpen} isScrolled={isScrolled} />
-             </motion.div>
+             {!isLoading && (
+               <motion.div 
+                 layoutId="main-logo" 
+                 transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                 className="w-full h-full flex items-center justify-center"
+               >
+                 <TurkizLogo isWhite={!isScrolled || isMobileMenuOpen} isScrolled={isScrolled} />
+               </motion.div>
+             )}
           </div>
           
           <div className="hidden md:flex flex-1 justify-end space-x-8 lg:space-x-12 text-[13px] md:text-[14px] font-sans tracking-[0.15em] uppercase items-center">
@@ -462,7 +510,6 @@ export default function TurkizLuxury() {
                     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                   </svg>
                 </div>
-                
                 <span className="font-serif text-white text-3xl font-bold leading-none">4,7</span>
                 <div className="flex gap-1 text-[#FABB05]">
                   {[...Array(5)].map((_, i) => (
@@ -472,17 +519,14 @@ export default function TurkizLuxury() {
                   ))}
                 </div>
               </div>
-
-              <p className="text-white/80 font-sans text-[11px] uppercase tracking-[0.2em] font-medium text-center md:text-right">
-                Kiváló Google Értékelések
-              </p>
+              <p className="text-white/80 font-sans text-[11px] uppercase tracking-[0.2em] font-medium text-center md:text-right">Kiváló Google Értékelések</p>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
       {/* ======================================================== */}
-      {/* 1. SPECIÁLIS FOGÁSAINK - HORIZONTAL SCROLL SZEKCIÓ */}
+      {/* 1. SPECIALITÁSAINK - HORIZONTAL SCROLL (Fekvő képek, Üveghatású Pop-up) */}
       {/* ======================================================== */}
       <section ref={horizontalRef} className="relative h-[300vh] bg-white w-full">
         <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
@@ -499,10 +543,10 @@ export default function TurkizLuxury() {
               transition={{ duration: 0.8 }}
               className="w-[80vw] md:w-[32vw] flex flex-col justify-center flex-shrink-0 pr-8"
             >
-              <p className="text-[#62B6C7] font-sans text-[12px] uppercase tracking-[0.3em] font-bold mb-4">
-                Séfünk ajánlata
+              <p className="text-[#62B6C7] font-sans text-[11px] md:text-[13px] uppercase tracking-[0.25em] font-bold mb-4 md:mb-5">
+                Specialitásaink
               </p>
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-serif text-[#2C3E50] tracking-tight leading-tight uppercase">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-serif text-[#2C3E50] tracking-tight leading-tight">
                 Kivételes <br /> Fogásaink
               </h2>
             </motion.div>
@@ -514,19 +558,28 @@ export default function TurkizLuxury() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.6, delay: 0.1 * (idx % 3) }}
-                className="w-[78vw] sm:w-[50vw] md:w-[360px] lg:w-[400px] flex flex-col group flex-shrink-0 cursor-pointer"
+                className="w-[85vw] sm:w-[50vw] md:w-[450px] lg:w-[550px] flex flex-col group flex-shrink-0 cursor-pointer"
               >
-                <div className="relative w-full aspect-[4/5] overflow-hidden bg-gray-50">
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500 z-10" />
+                <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#0B131A] shadow-md">
+                  {/* Finom fekete átmenet, hogy a kép éles maradjon, de a pop-up szöveg olvasható legyen */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
                   <img 
                     src={dish.img} 
                     alt={dish.name} 
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out" 
                   />
+                  
+                  {/* Backdrop Blur Pop-up */}
+                  <div className="absolute inset-0 bg-[#0B131A]/60 opacity-0 group-hover:opacity-100 transition-all duration-500 z-20 flex flex-col justify-center items-center p-8 backdrop-blur-sm">
+                     <p className="text-white/95 text-center font-sans text-[14px] md:text-[15px] leading-relaxed translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                       {dish.info}
+                     </p>
+                  </div>
                 </div>
-                <div className="mt-5">
-                  <h3 className="text-2xl font-serif text-[#2C3E50] uppercase tracking-wide group-hover:text-[#62B6C7] transition-colors">{dish.name}</h3>
-                  <p className="text-[#577285] font-sans text-sm mt-2 leading-relaxed">{dish.desc}</p>
+                
+                <div className="mt-6">
+                  <h3 className="text-2xl md:text-3xl font-serif text-[#2C3E50] tracking-wide group-hover:text-[#62B6C7] transition-colors">{dish.name}</h3>
+                  <p className="text-[#577285] font-sans text-[14px] md:text-[15px] mt-2 leading-relaxed">{dish.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -537,7 +590,7 @@ export default function TurkizLuxury() {
       {/* ======================================================== */}
       {/* 2. GASZTRONÓMIA SZEKCIÓ */}
       {/* ======================================================== */}
-      <section id="about" className="relative w-full py-28 lg:py-40 bg-white px-6 lg:px-16 flex justify-center border-t-0">
+      <section id="about" className="relative w-full py-28 lg:py-40 bg-white px-6 lg:px-16 flex justify-center">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
           
           <motion.div 
@@ -547,7 +600,8 @@ export default function TurkizLuxury() {
             transition={{ duration: 1, ease: "easeOut" }}
             className="w-full lg:w-1/2"
           >
-            <div className="relative w-full aspect-[3/4] lg:aspect-square overflow-hidden shadow-2xl">
+            <div className="relative w-full aspect-[3/4] lg:aspect-square overflow-hidden shadow-2xl bg-[#0B131A]">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10" />
               <img src="/turkiz2.jpg" alt="Gasztronómia" className="w-full h-full object-cover" />
             </div>
           </motion.div>
@@ -559,10 +613,10 @@ export default function TurkizLuxury() {
             transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
             className="w-full lg:w-1/2 flex flex-col justify-center text-center lg:text-left"
           >
-            <p className="text-[#62B6C7] font-sans text-[11px] md:text-[12px] uppercase tracking-[0.3em] font-bold mb-4">
+            <p className="text-[#62B6C7] font-sans text-[11px] md:text-[13px] uppercase tracking-[0.25em] font-bold mb-4 md:mb-5">
               Gasztronómia
             </p>
-            <h2 className="text-3xl md:text-4xl lg:text-4xl font-serif text-[#2C3E50] tracking-tight leading-[1.2] mb-8 uppercase">
+            <h2 className="text-3xl md:text-4xl lg:text-4xl font-serif text-[#2C3E50] tracking-tight leading-[1.2] mb-8">
               Egy igazi török konyha, ahol minden érzékedet elvarázsoljuk
             </h2>
             <div className="flex flex-col gap-4 text-[#577285] font-sans text-[14px] md:text-[15px] leading-relaxed max-w-lg mx-auto lg:mx-0 text-left">
@@ -574,68 +628,70 @@ export default function TurkizLuxury() {
         </div>
       </section>
 
-      {/* MENU SZEKCIÓ */}
-      <section id="menu" className="relative py-24 lg:py-40 bg-[#1C2A35] overflow-hidden">
+      {/* --- MENÜ SZEKCIÓ (SÖTÉT, ELEGÁNS LUXUS DIZÁJN, KÉPES HÁTTÉRREL) --- */}
+      <section id="menu" className="relative py-28 lg:py-40 bg-[#1C2A35] overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img src="/uj_turkiz1.jpg" alt="Background Texture" className="w-full h-full object-cover opacity-60" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0B131A] via-black/30 to-black/20"></div>
+          <img src="/uj_turkiz1.jpg" alt="Background Texture" className="w-full h-full object-cover opacity-30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0B131A] via-[#0B131A]/80 to-[#0B131A]/40"></div>
         </div>
-        
-        <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-12 text-center md:text-center text-left">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer} className="flex flex-col items-start md:items-center w-full">
-            
-            <motion.h4 variants={fadeUpReveal} className="text-[#62B6C7] text-[12px] font-sans tracking-[0.3em] uppercase mb-8">Kínálatunk</motion.h4>
-            <motion.h2 variants={fadeUpReveal} className="text-4xl lg:text-5xl font-serif mb-6 text-white">MENÜ</motion.h2>
-            <motion.p variants={fadeUpReveal} className="text-white/80 font-sans text-[15px] md:text-[18px] max-w-3xl mx-auto leading-relaxed md:leading-loose mb-12 text-left md:text-center">
-              Stílusos török étterem, ahol átélheti Anatólia sokszínűségét és Törökország nosztalgikus ízeit. Hagyományos finomságok generációk óta őrzött receptjei, elegáns, klasszikus török hangulatban.
+
+        <div className="relative z-10 max-w-[90rem] mx-auto px-6 lg:px-12 flex flex-col lg:flex-row gap-16 lg:gap-24">
+          
+          {/* Bal oldal: Kategóriák */}
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer} className="w-full lg:w-1/3 flex flex-col items-start">
+            <motion.h4 variants={fadeUpReveal} className="text-[#62B6C7] font-sans text-[11px] md:text-[13px] font-bold uppercase tracking-[0.25em] mb-4 md:mb-5">Kínálatunk</motion.h4>
+            <motion.h2 variants={fadeUpReveal} className="text-4xl md:text-5xl lg:text-6xl font-serif mb-8 text-white tracking-tight">Menü</motion.h2>
+            <motion.p variants={fadeUpReveal} className="text-white/70 font-sans text-[14px] md:text-[15px] leading-relaxed mb-12">
+              Stílusos török étterem, ahol átélheti Anatólia sokszínűségét és Törökország nosztalgikus ízeit. Hagyományos finomságok generációk óta őrzött receptjei, elegáns hangulatban.
             </motion.p>
             
-            <motion.div variants={fadeUpReveal} className="flex flex-wrap justify-center gap-4 md:gap-8 mb-12 w-full">
+            <motion.div variants={fadeUpReveal} className="flex flex-col gap-6 w-full border-l-2 border-white/10 pl-6">
               {MENU_TABS.map((tab, idx) => (
                 <button 
                   key={idx}
                   onClick={() => setActiveMenuTab(idx)}
-                  className={`text-[12px] md:text-[14px] font-sans tracking-[0.2em] uppercase transition-all duration-300 pb-2 border-b-2 ${activeMenuTab === idx ? "text-white border-[#62B6C7]" : "text-white/40 border-transparent hover:text-white/80"}`}
+                  className={`text-left text-[14px] md:text-[16px] font-sans tracking-[0.2em] uppercase font-bold transition-all duration-300 ${activeMenuTab === idx ? "text-[#62B6C7] translate-x-2" : "text-white/40 hover:text-white/80"}`}
                 >
                   {tab}
                 </button>
               ))}
             </motion.div>
 
-            <motion.div variants={fadeUpReveal} className="w-full max-w-3xl mx-auto mb-16 text-left min-h-[400px]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeMenuTab}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="flex flex-col gap-2 md:gap-4"
-                >
-                  {MENU_CATEGORIES[activeMenuTab].map((item, idx) => (
-                    <HoverImageItem key={idx} item={item} />
-                  ))}
-                </motion.div>
-              </AnimatePresence>
-            </motion.div>
-
-            <motion.div variants={fadeUpReveal} className="w-full md:w-auto">
-               <a href="#" className="inline-block bg-transparent border border-white text-white font-sans tracking-[0.15em] uppercase text-[11px] md:text-[12px] hover:bg-white hover:text-[#2C3E50] transition-colors duration-500 w-full md:w-auto text-center whitespace-nowrap px-10 md:px-14 py-4">
-                Teljes Étlap Megtekintése
+            <motion.div variants={fadeUpReveal} className="mt-14">
+               <a href="#" className="inline-block border border-white/30 text-white px-10 py-4 uppercase font-sans tracking-[0.15em] text-[11px] font-bold hover:bg-white hover:text-[#2C3E50] transition-colors duration-500 whitespace-nowrap">
+                Teljes Étlap
               </a>
             </motion.div>
           </motion.div>
+
+          {/* Jobb oldal: Ételek */}
+          <div className="w-full lg:w-2/3 min-h-[500px]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeMenuTab}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="flex flex-col"
+              >
+                {MENU_CATEGORIES[activeMenuTab].map((item, idx) => (
+                  <HoverImageItem key={idx} item={item} />
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </section>
 
-      {/* --- VIP / VENDÉG GALÉRIA --- */}
-      <section className="py-16 lg:py-24 bg-white overflow-hidden">
-        <div className="max-w-[90rem] mx-auto px-6 lg:px-12">
+      {/* --- VIP / VENDÉG GALÉRIA (PONTOSAN 8 KÉP, FIX 2x4 RÁCS) --- */}
+      <section className="pt-24 pb-32 lg:pt-32 lg:pb-40 bg-white overflow-hidden border-t border-[#2C3E50]/10">
+        <div className="max-w-[90rem] mx-auto px-6 lg:px-12 flex flex-col items-center">
           
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="flex flex-col text-center items-center gap-4 mb-10">
-            <motion.h4 variants={fadeUpReveal} className="text-[#62B6C7] text-[11px] font-sans tracking-[0.3em] uppercase font-bold">Vendégeink</motion.h4>
-            <motion.h2 variants={fadeUpReveal} className="text-4xl font-serif text-[#2C3E50]">Kik jártak nálunk?</motion.h2>
-            <motion.p variants={fadeUpReveal} className="text-[#577285] max-w-lg text-[14px] md:text-[15px] font-sans leading-relaxed">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="flex flex-col text-center items-center gap-4 mb-16">
+            <motion.h4 variants={fadeUpReveal} className="text-[#62B6C7] font-sans text-[11px] md:text-[13px] font-bold uppercase tracking-[0.25em] mb-4 md:mb-5">Vendégeink</motion.h4>
+            <motion.h2 variants={fadeUpReveal} className="text-4xl md:text-5xl font-serif text-[#2C3E50]">Kik jártak nálunk?</motion.h2>
+            <motion.p variants={fadeUpReveal} className="text-[#577285] max-w-xl text-[14px] md:text-[15px] font-sans leading-relaxed mt-4">
               Büszkék vagyunk rá, hogy a TÜRKIZ élményt az évek során már számos hazai és nemzetközi ismert személyiség is átélte nálunk.
             </motion.p>
           </motion.div>
@@ -645,107 +701,151 @@ export default function TurkizLuxury() {
             whileInView="visible" 
             viewport={{ once: true, margin: "-50px" }} 
             variants={staggerContainer} 
-            className="w-full overflow-hidden relative"
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full mb-16"
           >
-            <div 
-              ref={vipScrollRef} 
-              onScroll={handleVipScroll}
-              className="w-full overflow-x-auto hide-scrollbar flex gap-4 md:gap-6 pb-4 snap-x snap-mandatory"
+            {VIP_IMAGES.map((item, idx) => (
+              <motion.a 
+                variants={fadeUpReveal}
+                href="https://www.instagram.com/turkiz_budapest/"
+                target="_blank"
+                rel="noopener noreferrer"
+                key={idx} 
+                className="group aspect-square relative overflow-hidden bg-gray-50 block cursor-pointer"
+              >
+                {/* Instagram Hover Overlay */}
+                <div className="absolute inset-0 bg-[#0B131A]/0 group-hover:bg-[#0B131A]/60 transition-colors duration-500 z-10 flex items-center justify-center">
+                  <div className="opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500 ease-out flex flex-col items-center gap-3">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                    <span className="text-white font-sans text-[10px] tracking-[0.2em] uppercase font-bold">Megtekintés</span>
+                  </div>
+                </div>
+                <img 
+                  src={`/vendeg${item}.jpg`} 
+                  alt={`VIP Guest ${idx + 1}`} 
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+              </motion.a>
+            ))}
+          </motion.div>
+          
+          <motion.a 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            href="https://www.instagram.com/turkiz_budapest/" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 border border-[#2C3E50]/30 text-[#2C3E50] px-10 py-4 uppercase font-sans tracking-[0.15em] text-[11px] font-bold hover:bg-[#2C3E50] hover:text-white transition-colors duration-500"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            Kövessen minket Instagramon
+          </motion.a>
+
+        </div>
+      </section>
+
+      {/* --- RENDEZVÉNYEK SZEKCIÓ (DISZKRÉT LISTA, BAL OLDALI DÁTUM) --- */}
+      <section id="events" className="relative py-24 lg:py-40 bg-[#0B131A] overflow-hidden min-h-[90vh] flex items-center">
+        <div className="absolute inset-0 w-full h-full bg-[#0B131A]">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={activeEvent}
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
+              src={EVENTS[activeEvent].img}
+              className="absolute inset-0 w-full h-full object-cover"
+              alt="Esemény háttér"
+            />
+          </AnimatePresence>
+          {/* Gyönyörű üveghatású maszkolás - bal oldalon teljesen sötét, jobb oldalon finomabban takar */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0B131A] via-[#0B131A]/90 to-[#0B131A]/40 z-0"></div>
+        </div>
+
+        <div className="relative z-10 max-w-[90rem] mx-auto px-6 lg:px-12 w-full flex flex-col lg:flex-row justify-between items-center h-full gap-16 lg:gap-8">
+          
+          {/* Main Content (Left) - Dátum kijelzéssel és Asztalfoglalás NÉLKÜL */}
+          <div className="w-full lg:w-1/2 flex flex-col items-start text-left pt-10">
+            <motion.h4 
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-[#62B6C7] font-sans text-[11px] md:text-[13px] font-bold uppercase tracking-[0.25em] mb-4 md:mb-5"
             >
-              {VIP_IMAGES.map((item, idx) => (
-                <motion.a 
-                  variants={fadeUpReveal}
-                  href="https://www.instagram.com/turkiz_budapest/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  key={idx} 
-                  className="group w-[calc((100%-16px)/2)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] h-[240px] sm:h-[300px] md:h-[380px] flex-shrink-0 snap-start relative overflow-hidden bg-gray-50 block cursor-pointer"
+              Programok & Események
+            </motion.h4>
+            
+            <div className="min-h-[220px] flex flex-col justify-center w-full">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeEvent}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
                 >
-                  {/* Instagram Hover Overlay */}
-                  <div className="absolute inset-0 bg-[#0B131A]/0 group-hover:bg-[#0B131A]/40 transition-colors duration-500 z-10 flex items-center justify-center">
-                    <div className="opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500 ease-out flex flex-col items-center gap-3">
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                      </svg>
-                      <span className="text-white font-sans text-[10px] tracking-[0.2em] uppercase font-bold">Megtekintés</span>
-                    </div>
+                  {/* Dátum kijelző a Fő Eseménynél */}
+                  <div className="flex gap-5 items-center mb-6">
+                     <div className="bg-[#62B6C7] text-white py-3 px-4 flex flex-col items-center justify-center min-w-[80px] shadow-lg">
+                       <span className="text-[11px] uppercase font-bold tracking-widest mb-1">{EVENTS[activeEvent].month}</span>
+                       <span className="text-4xl font-serif font-bold leading-none">{EVENTS[activeEvent].day}</span>
+                     </div>
+                     <div className="flex flex-col">
+                       <span className="text-[#62B6C7] font-sans text-[12px] uppercase tracking-[0.2em] font-bold">{EVENTS[activeEvent].year}</span>
+                       <span className="text-white/90 font-sans text-[13px] uppercase tracking-[0.1em]">{EVENTS[activeEvent].time}</span>
+                     </div>
                   </div>
 
-                  <img 
-                    src={`/vendeg${item}.jpg`} 
-                    alt={`VIP Guest`} 
-                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                </motion.a>
-              ))}
+                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white leading-[1.1] mb-6 tracking-tight drop-shadow-md">
+                    {EVENTS[activeEvent].title}
+                  </h2>
+                  <p className="text-white/90 leading-relaxed font-sans text-[15px] md:text-[16px] max-w-md drop-shadow-md">
+                    {EVENTS[activeEvent].desc}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Letisztult vonalas navigáció a pöttyök helyett */}
-          <div className="flex justify-center items-center gap-2 mt-8">
-            {VIP_IMAGES.map((_, idx) => (
-              <button 
-                key={idx} 
-                onClick={() => handleDotClick(idx)}
-                className={`h-[3px] transition-all duration-500 rounded-full ${activeDot === idx ? "bg-[#2C3E50] w-8" : "bg-[#2C3E50]/15 w-3 hover:bg-[#2C3E50]/30"}`}
-                aria-label={`Ugrás a ${idx + 1}. vendégre`}
-              />
+          {/* Vertical Navigation (Right) - Visszafogott, elegáns lista üveghatású panelben */}
+          <div className="w-full lg:w-4/12 flex flex-col gap-2 bg-[#0B131A]/40 backdrop-blur-md border border-white/10 p-6 md:p-8 rounded-2xl shadow-2xl">
+            {EVENTS.map((evt, idx) => (
+               <button
+                  key={idx}
+                  onClick={() => setActiveEvent(idx)}
+                  className={`flex flex-col items-start justify-center w-full transition-all duration-500 py-4 px-5 rounded-xl ${activeEvent === idx ? 'bg-black/60 border border-white/20 opacity-100' : 'bg-transparent border border-transparent opacity-60 hover:opacity-100 hover:bg-black/20'}`}
+               >
+                  <span className={`text-[17px] md:text-[19px] font-serif tracking-wide drop-shadow-md mb-2 ${activeEvent === idx ? 'text-white' : 'text-white/90'}`}>
+                    {evt.title}
+                  </span>
+                  <div className="flex items-center gap-3">
+                    <span className={`text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold ${activeEvent === idx ? 'text-[#62B6C7]' : 'text-white/70'}`}>
+                      {evt.month} {evt.day}
+                    </span>
+                    <span className="w-1 h-1 rounded-full bg-white/30"></span>
+                    <span className="text-[#62B6C7] font-sans text-[10px] md:text-[11px] uppercase tracking-[0.15em] font-bold drop-shadow-sm">
+                      {evt.time}
+                    </span>
+                  </div>
+               </button>
             ))}
           </div>
-          
+
         </div>
       </section>
 
-      {/* RENDEZVÉNYHELYSZÍN */}
-      <section id="events" className="py-24 lg:py-40 bg-white overflow-hidden border-t-0">
-        <div className="max-w-[90rem] mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
-          
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="w-full lg:w-5/12 flex flex-col items-start text-left">
-            <motion.h4 variants={fadeUpReveal} className="text-[#62B6C7] text-[11px] font-sans tracking-[0.3em] uppercase mb-4 font-bold">Exkluzivitás</motion.h4>
-            <motion.h2 variants={fadeUpReveal} className="text-4xl md:text-5xl lg:text-6xl font-serif text-[#2C3E50] leading-[1.1] mb-8 uppercase tracking-tight">
-              Tökéletes<br/>Helyszín Minden<br/>Alkalomra
-            </motion.h2>
-            <motion.p variants={fadeUpReveal} className="text-[#577285] leading-relaxed font-sans text-[15px] md:text-[16px] mb-12">
-              Üzleti vacsora, évforduló vagy zártkörű esemény? A TÜRKIZ egyedi belső terei, elszeparált termei és személyre szabott vendéglátása garantálják az exkluzív és felejthetetlen élményt minden vendégünk számára.
-            </motion.p>
-            
-            <motion.div variants={fadeUpReveal} className="flex gap-12 border-l-2 border-[#62B6C7] pl-6 mb-12">
-              <div>
-                <p className="text-4xl font-serif text-[#2C3E50] mb-1">40</p>
-                <p className="text-[#577285] text-[10px] uppercase tracking-[0.2em] font-bold">Főig Bővíthető</p>
-              </div>
-              <div>
-                <p className="text-4xl font-serif text-[#2C3E50] mb-1">VIP</p>
-                <p className="text-[#577285] text-[10px] uppercase tracking-[0.2em] font-bold">Zártkörű Termek</p>
-              </div>
-            </motion.div>
-
-            <motion.a variants={fadeUpReveal} href="#reservation" className="inline-block border border-[#2C3E50]/30 text-[#2C3E50] px-10 py-4 uppercase font-sans tracking-[0.15em] text-[11px] font-bold hover:bg-[#2C3E50] hover:text-white transition-colors duration-500">
-              Ajánlatkérés
-            </motion.a>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="w-full lg:w-7/12 relative h-[500px] sm:h-[600px] lg:h-[700px]"
-          >
-            <div className="absolute top-0 right-0 w-[85%] h-[85%] overflow-hidden shadow-2xl">
-              <img src="/uj_turkiz1.jpg" className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-1000" alt="Rendezvény terem" />
-            </div>
-            <div className="absolute bottom-0 left-0 w-[55%] h-[60%] overflow-hidden shadow-2xl border-4 border-white">
-              <img src="/turkiz2.jpg" className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-1000" alt="Privát étkezés" />
-            </div>
-          </motion.div>
-          
-        </div>
-      </section>
-
-      {/* --- VÉLEMÉNYEK SZEKCIÓ --- */}
+      {/* --- VÉLEMÉNYEK SZEKCIÓ (NAGYOBB KÁRTYÁK, LASSABB ANIMÁCIÓ) --- */}
       <section id="reviews" className="py-28 lg:py-40 bg-white overflow-hidden">
         <div className="max-w-[90rem] mx-auto px-6 lg:px-12 mb-16 text-center">
           <motion.p 
@@ -753,7 +853,7 @@ export default function TurkizLuxury() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-[#62B6C7] text-[12px] font-sans tracking-[0.3em] uppercase font-bold mb-4"
+            className="text-[#62B6C7] font-sans text-[11px] md:text-[13px] font-bold uppercase tracking-[0.25em] mb-4 md:mb-5"
           >
             Vendégélmény
           </motion.p>
@@ -762,7 +862,7 @@ export default function TurkizLuxury() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-4xl lg:text-6xl font-serif text-[#2C3E50] tracking-tight uppercase"
+            className="text-4xl lg:text-6xl font-serif text-[#2C3E50] tracking-tight"
           >
             Rólunk Mondták
           </motion.h2>
@@ -771,34 +871,35 @@ export default function TurkizLuxury() {
         <div className="relative w-full overflow-hidden flex items-center py-6">
           <motion.div 
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ ease: "linear", duration: 38, repeat: Infinity }}
-            className="flex w-max gap-8 px-6"
+            transition={{ ease: "linear", duration: 70, repeat: Infinity }}
+            className="flex w-max gap-8 md:gap-12 px-6"
           >
+            {/* Szélesebb kártyák, nagyobb belső tartalom */}
             {[...REVIEWS, ...REVIEWS].map((review, idx) => (
               <div 
                 key={idx} 
-                className="w-[340px] sm:w-[400px] md:w-[450px] bg-[#0B131A] p-8 md:p-10 flex-shrink-0 flex flex-col justify-between group hover:shadow-[0_20px_50px_rgba(98,182,199,0.15)] transition-all duration-500"
+                className="w-[85vw] sm:w-[500px] md:w-[600px] bg-[#0B131A] p-10 md:p-14 flex-shrink-0 flex flex-col justify-between group hover:shadow-[0_20px_50px_rgba(98,182,199,0.15)] transition-all duration-500"
               >
                 <div>
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="flex gap-1.5 text-[#FABB05] pt-2">
+                  <div className="flex justify-between items-start mb-8">
+                    <div className="flex gap-2 text-[#FABB05] pt-2">
                       {[...Array(5)].map((_, i) => (
-                        <svg key={i} className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <svg key={i} className="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                         </svg>
                       ))}
                     </div>
-                    <span className="font-serif text-5xl text-[#62B6C7]/30 leading-none select-none group-hover:text-[#62B6C7] transition-colors">“</span>
+                    <span className="font-serif text-6xl md:text-7xl text-[#62B6C7]/30 leading-none select-none group-hover:text-[#62B6C7] transition-colors">“</span>
                   </div>
 
-                  <p className="text-white/90 font-sans text-[14px] md:text-[15.5px] leading-relaxed mb-8 font-normal">
+                  <p className="text-white/90 font-sans text-[16px] md:text-[18px] leading-relaxed mb-10 font-normal">
                     "{review.text}"
                   </p>
                 </div>
 
-                <div className="pt-5 border-t border-white/10 flex flex-col">
-                  <h4 className="text-white font-serif text-xl font-bold tracking-tight">{review.name}</h4>
-                  <p className="text-[#62B6C7] font-sans text-[11px] uppercase tracking-[0.2em] font-bold mt-1.5">{review.title}</p>
+                <div className="pt-6 border-t border-white/10 flex flex-col">
+                  <h4 className="text-white font-serif text-2xl font-bold tracking-tight">{review.name}</h4>
+                  <p className="text-[#62B6C7] font-sans text-[12px] md:text-[13px] uppercase tracking-[0.2em] font-bold mt-1.5">{review.title}</p>
                 </div>
               </div>
             ))}
@@ -806,7 +907,7 @@ export default function TurkizLuxury() {
         </div>
       </section>
 
-      {/* SÖTÉT WRAPPER (CTA + TESTVÉRÉTTEREM + LÁBLÉC) */}
+      {/* SÖTÉT WRAPPER (KAPCSOLAT + ROSE + LÁBLÉC EGYBEOLVASZTVA, BORDER NÉLKÜL) */}
       <div className="w-full bg-[#0B131A] text-white flex flex-col">
 
         {/* ASZTALFOGLALÁS */}
@@ -814,7 +915,7 @@ export default function TurkizLuxury() {
           <div className="w-full max-w-[90rem] mx-auto px-6 lg:px-12 text-white">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpReveal} className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start">
               <div className="flex-1">
-                <h4 className="text-[#62B6C7] text-[11px] font-sans tracking-[0.3em] uppercase mb-4 md:mb-6">Kapcsolat</h4>
+                <h4 className="text-[#62B6C7] font-sans text-[11px] md:text-[13px] font-bold uppercase tracking-[0.25em] mb-4 md:mb-5">Kapcsolat</h4>
                 <h2 className="text-4xl lg:text-5xl font-serif mb-6 md:mb-8">Várjuk Szeretettel</h2>
                 <p className="text-white/80 font-sans text-[14px] md:text-[15px] leading-relaxed mb-10 max-w-2xl text-left">
                   Budapest belvárosának nevezetes háromszögében a Kossuth Lajos tér szomszédságában található a TÜRKIZ étterem.
@@ -873,38 +974,43 @@ export default function TurkizLuxury() {
           </div>
         </section>
 
-        {/* --- TESTVÉRÉTTEREM SZEKCIÓ --- */}
-        <section className="relative z-10 py-28 lg:py-36 overflow-hidden">
+        {/* --- ROSE SZEKCIÓ (Kisebb, középre zárt, lágy átmenettel a Kapcsolat és a Footer felé) --- */}
+        <section className="relative z-10 py-24 lg:py-32 overflow-hidden min-h-[50vh] flex items-center bg-[#0B131A]">
           <div className="absolute inset-0 z-0">
-            <img src="/rose1.jpg" alt="Rose Restaurant" className="w-full h-full object-cover opacity-80" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0B131A] via-black/40 to-[#0B131A]"></div>
+            {/* A képre tett sötét réteg elveszi a "pixeles" hatást */}
+            <img src="/rose1.jpg" alt="Rose Restaurant" className="w-full h-full object-cover opacity-100" />
+            <div className="absolute inset-0 bg-black/40 z-10"></div>
+            {/* LÁGY FADE MASZK alul-felül */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0B131A] via-transparent to-[#0B131A] z-10"></div>
           </div>
           
-          <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-12 flex flex-col items-center text-center">
+          <div className="relative z-20 max-w-3xl mx-auto px-6 lg:px-12 w-full flex flex-col items-center justify-center text-center">
              <motion.div 
-               initial={{ opacity: 0, scale: 0.95 }} 
-               whileInView={{ opacity: 1, scale: 1 }} 
+               initial={{ opacity: 0, y: 20 }} 
+               whileInView={{ opacity: 1, y: 0 }} 
                transition={{ duration: 1 }} 
-               className="mb-8 max-w-[150px] md:max-w-[180px]"
+               viewport={{once: true}}
              >
-               <img src="/rose-logo-logo-2.png" alt="Rose" className="w-full h-auto object-contain drop-shadow-[0_15px_35px_rgba(0,0,0,0.6)]" />
+               <img src="/rose-logo-logo-2.png" alt="Rose" className="w-40 md:w-52 object-contain drop-shadow-[0_15px_35px_rgba(0,0,0,0.6)] mb-8" />
              </motion.div>
 
              <motion.p 
                initial={{ opacity: 0, y: 20 }} 
                whileInView={{ opacity: 1, y: 0 }} 
                transition={{ duration: 1, delay: 0.2 }} 
-               className="text-white/80 text-[15px] md:text-[16px] font-sans leading-relaxed max-w-xl mb-10"
+               viewport={{once: true}}
+               className="text-white/95 text-[15px] md:text-[16px] font-sans leading-relaxed mb-10 drop-shadow-md max-w-2xl"
              >
-               Folytassa az estét különleges signature koktélokkal és modern mezzékkel a Rose-ban.
+               Folytassa az estét különleges signature koktélokkal és modern mezzékkel a Rose-ban. Tapasztalja meg a prémium bárélményt közvetlenül a TÜRKIZ mellett.
              </motion.p>
 
              <motion.a 
                initial={{ opacity: 0, y: 20 }} 
                whileInView={{ opacity: 1, y: 0 }} 
                transition={{ duration: 1, delay: 0.3 }} 
+               viewport={{once: true}}
                href="#" 
-               className="inline-flex items-center justify-center px-10 py-4 bg-transparent border border-white/80 text-white hover:bg-white hover:text-[#2C3E50] transition-colors duration-300 uppercase tracking-[0.2em] text-[11px] whitespace-nowrap font-bold"
+               className="inline-flex items-center justify-center px-10 py-4 bg-white text-[#0B131A] hover:bg-[#62B6C7] hover:text-white transition-colors duration-300 uppercase tracking-[0.2em] text-[11px] md:text-[12px] whitespace-nowrap font-bold shadow-[0_10px_30px_rgba(0,0,0,0.3)]"
              >
                Felfedezem a Rose-t
              </motion.a>
@@ -912,7 +1018,7 @@ export default function TurkizLuxury() {
         </section>
 
         {/* --- LÁBLÉC --- */}
-        <footer className="relative z-10 py-8 lg:py-10">
+        <footer className="relative z-10 py-8 lg:py-10 bg-[#0B131A]">
           <div className="max-w-[90rem] mx-auto px-6 lg:px-12 flex flex-col xl:flex-row justify-between items-center gap-6 xl:gap-4 w-full">
             <div className="flex gap-4 text-[11px] md:text-[12px] font-sans tracking-[0.2em] text-white/70">
               <a href="/hu" className="text-white font-bold underline underline-offset-4 whitespace-nowrap hover:text-white">HU</a>
