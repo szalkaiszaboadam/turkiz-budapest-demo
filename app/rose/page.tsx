@@ -3,49 +3,49 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, Variants, useSpring, useMotionValue } from "framer-motion";
 
-// --- ROSE ADATOK (KOKTÉLOK ÉS MEZZÉK) ---
+// --- ROSE ADATOK ---
 const DISHES = [
   { 
     name: "Rose Signature", 
     desc: "A ház ikonikus koktélja prémium ginnel, rózsavízzel és friss málnával.", 
     info: "Lágy, virágos jegyek és frissítő citrusok tökéletes harmóniája. Kézműves rózsavízzel és ehető virágszirmokkal tálalva a tökéletes eleganciáért.",
-    img: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=800&q=80" 
+    img: "/1.jpg" 
   },
   { 
     name: "Smoked Negroni", 
     desc: "Klasszikus Negroni egy csipetnyi füsttel és érlelt fűszerekkel.", 
     info: "A hagyományos receptet tölgyfa füsttel bolondítjuk meg, ami mély, karakteres ízvilágot kölcsönöz az italnak. Igazi ínyenceknek.",
-    img: "https://images.unsplash.com/photo-1568644396922-5c3bfae12521?auto=format&fit=crop&w=800&q=80" 
+    img: "/2.jpg" 
   },
   { 
     name: "Truffle Labneh", 
     desc: "Szarvasgombás krémsajt pirított pisztáciával és gránátalmával.", 
     info: "Selymesen lágy, házi készítésű labneh, melyet prémium szarvasgomba olajjal, ropogós pisztáciával és friss gránátalmamagokkal teszünk felejthetetlenné.",
-    img: "https://images.unsplash.com/photo-1529312266912-b33cfce2eefd?auto=format&fit=crop&w=800&q=80" 
+    img: "/3.jpg" 
   },
   { 
     name: "Spicy Margarita", 
     desc: "Tequila alapú frissítő egy csipetnyi jalapeño pikánsságával.", 
     info: "A citrusos frissességet és a prémium tequilát egy leheletnyi jalapeño chili teszi izgalmassá. Sós-fűszeres peremmel tálalva.",
-    img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80" 
+    img: "/4.jpg" 
   },
   { 
     name: "Bosphorus Breeze", 
     desc: "Vodka, uborka, menta és bodza – a nyári éjszaka íze.", 
     info: "Könnyed, ropogós és végtelenül frissítő. Az uborka és a menta hűsítő hatását a bodza édeskés virágossága egészíti ki.",
-    img: "https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=800&q=80" 
+    img: "/5.jpg" 
   },
   { 
     name: "Kacsa Rillette Meze", 
     desc: "Lassan sült kacsahús ropogós pitával és füge lekvárral.", 
     info: "Omlós, fűszeres kacsahús, melyet édes-pikáns füge lekvárral és frissen sült, meleg anatóliai pitával kínálunk megosztásra az italok mellé.",
-    img: "https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=800&q=80" 
+    img: "/6.jpg" 
   },
   { 
     name: "Espresso Martini", 
     desc: "Sötét, krémes és energikus – prémium vodka és friss espresso.", 
     info: "Az este beindítója. Gondosan kiválasztott, frissen pörkölt kávéból készült espresso, selymes kávélikőr és tiszta vodka tökéletes aránya.",
-    img: "https://images.unsplash.com/photo-1625860633266-1de8a56f6c9b?auto=format&fit=crop&w=800&q=80" 
+    img: "/7.jpg" 
   }
 ];
 
@@ -53,21 +53,21 @@ const MENU_TABS = ["Signature Koktélok", "Modern Mezzék", "Klasszikusok"];
 
 const MENU_CATEGORIES = [
   [
-    { name: "Rose Signature", desc: "Prémium gin, kézműves rózsavíz, licsi, friss málna", price: "4 500 Ft", img: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=800&q=80" },
-    { name: "Anatolian Sour", desc: "Whiskey, friss citrom, narancsvirág hab, szömörce", price: "4 200 Ft", img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80" },
-    { name: "Spicy Pomegranate", desc: "Mezcal, gránátalma szirup, jalapeño, lime", price: "4 600 Ft", img: "https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=800&q=80" },
-    { name: "Smoked Old Fashioned", desc: "Bourbon, angostura, bükkfa füst, narancshéj", price: "4 800 Ft", img: "https://images.unsplash.com/photo-1568644396922-5c3bfae12521?auto=format&fit=crop&w=800&q=80" }
+    { name: "Rose Signature", desc: "Prémium gin, kézműves rózsavíz, licsi, friss málna", price: "4 500 Ft", img: "/1.jpg" },
+    { name: "Anatolian Sour", desc: "Whiskey, friss citrom, narancsvirág hab, szömörce", price: "4 200 Ft", img: "/2.jpg" },
+    { name: "Spicy Pomegranate", desc: "Mezcal, gránátalma szirup, jalapeño, lime", price: "4 600 Ft", img: "/3.jpg" },
+    { name: "Smoked Old Fashioned", desc: "Bourbon, angostura, bükkfa füst, narancshéj", price: "4 800 Ft", img: "/4.jpg" }
   ],
   [
-    { name: "Truffle Labneh", desc: "Selymes krémsajt, szarvasgomba olaj, pirított pisztácia", price: "3 800 Ft", img: "https://images.unsplash.com/photo-1529312266912-b33cfce2eefd?auto=format&fit=crop&w=800&q=80" },
-    { name: "Spicy Muhammara", desc: "Pikáns diós-sültpaprika krém, gránátalma, ropogós pita", price: "3 500 Ft", img: "https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=800&q=80" },
-    { name: "Calamari Ceviche", desc: "Grillezett tintahal, citrusos-korianderes marinád", price: "4 900 Ft", img: "https://images.unsplash.com/photo-1533777324565-a040eb52facd?auto=format&fit=crop&w=800&q=80" },
-    { name: "Beef Tartare", desc: "Bélszín tatár anatóliai fűszerekkel, fürjtojás", price: "5 200 Ft", img: "https://images.unsplash.com/photo-1544025162-83141f22e863?auto=format&fit=crop&w=800&q=80" }
+    { name: "Truffle Labneh", desc: "Selymes krémsajt, szarvasgomba olaj, pirított pisztácia", price: "3 800 Ft", img: "/5.jpg" },
+    { name: "Spicy Muhammara", desc: "Pikáns diós-sültpaprika krém, gránátalma, ropogós pita", price: "3 500 Ft", img: "/6.jpg" },
+    { name: "Calamari Ceviche", desc: "Grillezett tintahal, citrusos-korianderes marinád", price: "4 900 Ft", img: "/7.jpg" },
+    { name: "Beef Tartare", desc: "Bélszín tatár anatóliai fűszerekkel, fürjtojás", price: "5 200 Ft", img: "/1.jpg" }
   ],
   [
-    { name: "Negroni", desc: "Gin, Campari, édes vermut – a klasszikus recept", price: "3 900 Ft", img: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=800&q=80" },
-    { name: "Espresso Martini", desc: "Vodka, kávélikőr, friss espresso", price: "4 100 Ft", img: "https://images.unsplash.com/photo-1625860633266-1de8a56f6c9b?auto=format&fit=crop&w=800&q=80" },
-    { name: "Moscow Mule", desc: "Prémium vodka, gyömbérsör, friss lime", price: "3 800 Ft", img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80" }
+    { name: "Negroni", desc: "Gin, Campari, édes vermut – a klasszikus recept", price: "3 900 Ft", img: "/2.jpg" },
+    { name: "Espresso Martini", desc: "Vodka, kávélikőr, friss espresso", price: "4 100 Ft", img: "/3.jpg" },
+    { name: "Moscow Mule", desc: "Prémium vodka, gyömbérsör, friss lime", price: "3 800 Ft", img: "/4.jpg" }
   ]
 ];
 
@@ -76,9 +76,9 @@ const EVENTS = [
     title: "Deep House & Cocktails",
     year: "2026",
     month: "AUG",
-    day: "15",
+    day: "14",
     desc: "Indítsa a hétvégét a város legjobb lemezlovasaival és limitált kiadású nyári koktéljainkkal a pultnál.",
-    img: "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?auto=format&fit=crop&w=1600&q=80"
+    img: "/turkiz2.jpg"
   },
   {
     title: "Ladies Night",
@@ -86,7 +86,7 @@ const EVENTS = [
     month: "AUG",
     day: "21",
     desc: "Exkluzív este hölgyeknek. Minden Signature Rose koktél mellé ajándék desszert meze válogatással kedveskedünk.",
-    img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=1600&q=80"
+    img: "/turkiz1.jpg"
   },
   {
     title: "Guest Bartender: Luigi Rossi",
@@ -94,7 +94,7 @@ const EVENTS = [
     month: "AUG",
     day: "28",
     desc: "Olaszország egyik legnevesebb mixere érkezik hozzánk egyetlen estére, egyedi itallappal és flair show-val.",
-    img: "https://images.unsplash.com/photo-1625860633266-1de8a56f6c9b?auto=format&fit=crop&w=1600&q=80"
+    img: "/turkiz3.jpg"
   },
   {
     title: "End of Summer Party",
@@ -102,7 +102,7 @@ const EVENTS = [
     month: "SZEP",
     day: "04",
     desc: "Búcsúztassuk együtt a nyarat egy hatalmas bulival, élő DJ szettel és prémium pezsgő kóstolóval.",
-    img: "https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=1600&q=80"
+    img: "/rose1.jpg"
   }
 ];
 
@@ -125,17 +125,17 @@ const OPENING_HOURS = [
 ];
 
 const VIP_IMAGES = [
-  { id: 1, url: "https://www.instagram.com/rosebar_budapest/" },
-  { id: 2, url: "https://www.instagram.com/rosebar_budapest/" },
-  { id: 3, url: "https://www.instagram.com/rosebar_budapest/" },
-  { id: 4, url: "https://www.instagram.com/rosebar_budapest/" },
-  { id: 5, url: "https://www.instagram.com/rosebar_budapest/" },
-  { id: 6, url: "https://www.instagram.com/rosebar_budapest/" },
-  { id: 7, url: "https://www.instagram.com/rosebar_budapest/" },
-  { id: 8, url: "https://www.instagram.com/rosebar_budapest/" }
+  { id: 1, url: "https://www.instagram.com/rose_budapest/" },
+  { id: 2, url: "https://www.instagram.com/rose_budapest/" },
+  { id: 3, url: "https://www.instagram.com/rose_budapest/" },
+  { id: 4, url: "https://www.instagram.com/rose_budapest/" },
+  { id: 5, url: "https://www.instagram.com/rose_budapest/" },
+  { id: 6, url: "https://www.instagram.com/rose_budapest/" },
+  { id: 7, url: "https://www.instagram.com/rose_budapest/" },
+  { id: 8, url: "https://www.instagram.com/rose_budapest/" }
 ];
 
-// --- PONTOSAN IGAZÍTOTT MORFÓZIS LOGÓ KOMPONENS (TÜRKIZ LOGÓ A TESTVÉRÉTTEREM SZEKCIÓHOZ) ---
+// --- PONTOSAN IGAZÍTOTT MORFÓZIS LOGÓ KOMPONENS (TÜRKIZ) ---
 const TurkizLogo = ({ isWhite = false, isScrolled = false }: { isWhite?: boolean; isScrolled?: boolean }) => {
   const textColor = isWhite ? "#ffffff" : "#2C3E50";
   const iconColor = "#62B6C7";
@@ -231,7 +231,7 @@ const HoverImageItem = ({ item }: { item: any }) => {
     <div 
       onMouseEnter={() => setIsHovered(true)} 
       onMouseLeave={() => setIsHovered(false)}
-      className="flex flex-col justify-between items-start border-b border-white/10 py-5 md:py-6 group cursor-pointer relative transition-colors duration-300 hover:border-white/30"
+      className="flex flex-col justify-between items-start py-5 md:py-6 group cursor-pointer relative transition-all duration-500 hover:pl-4"
     >
       <div className="flex justify-between items-start w-full mb-2">
         <h3 className="font-serif text-xl md:text-2xl text-white group-hover:text-[#E7918A] transition-colors duration-300 pr-4">{item.name}</h3>
@@ -239,7 +239,7 @@ const HoverImageItem = ({ item }: { item: any }) => {
           {item.price}
         </div>
       </div>
-      <p className="font-sans text-white/60 text-[13px] md:text-[14px] leading-relaxed max-w-[90%]">{item.desc}</p>
+      <p className="font-sans text-white/60 text-[13px] md:text-[14px] leading-relaxed max-w-[90%] transition-colors duration-300 group-hover:text-white/80">{item.desc}</p>
 
       <AnimatePresence>
         {isHovered && (
@@ -251,7 +251,7 @@ const HoverImageItem = ({ item }: { item: any }) => {
             style={{ left: xSpring, top: ySpring, x: "-50%", y: "-50%" }}
             src={item.img}
             alt={item.name}
-            className="fixed w-[280px] h-[360px] object-cover z-[9999] pointer-events-none drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] border border-white/20 hidden md:block"
+            className="fixed w-[280px] h-[360px] object-cover z-[9999] pointer-events-none drop-shadow-[0_30px_60px_rgba(231,145,138,0.15)] hidden md:block rounded-sm"
           />
         )}
       </AnimatePresence>
@@ -349,40 +349,43 @@ export default function RoseLuxury() {
   const nextEvent = () => setActiveEvent((prev) => (prev + 1) % EVENTS.length);
   const prevEvent = () => setActiveEvent((prev) => (prev - 1 + EVENTS.length) % EVENTS.length);
 
-  // --- PRELOADER ---
+  // --- 1. PRELOADER: Inicializálás és felgörgetés ---
   useEffect(() => {
     if (typeof window !== "undefined" && window.history && "scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
     window.scrollTo(0, 0);
+  }, []);
 
-    if (isLoading) {
-      const preventDefault = (e: any) => e.preventDefault();
-      const preventDefaultForScrollKeys = (e: any) => {
-        if (["Space", "ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End"].includes(e.code)) {
-          e.preventDefault();
-        }
-      };
+  // --- 2. PRELOADER: Görgetés JS blokkolás ---
+  useEffect(() => {
+    if (!isLoading) return;
 
-      window.addEventListener('wheel', preventDefault, { passive: false });
-      window.addEventListener('touchmove', preventDefault, { passive: false });
-      window.addEventListener('keydown', preventDefaultForScrollKeys, { passive: false });
+    const preventDefault = (e: any) => e.preventDefault();
+    const preventDefaultForScrollKeys = (e: any) => {
+      if (["Space", "ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End"].includes(e.code)) {
+        e.preventDefault();
+      }
+    };
 
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 2500);
+    window.addEventListener('wheel', preventDefault, { passive: false });
+    window.addEventListener('touchmove', preventDefault, { passive: false });
+    window.addEventListener('keydown', preventDefaultForScrollKeys, { passive: false });
 
-      return () => {
-        window.removeEventListener('wheel', preventDefault);
-        window.removeEventListener('touchmove', preventDefault);
-        window.removeEventListener('keydown', preventDefaultForScrollKeys);
-        clearTimeout(timer);
-      };
-    }
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2500);
+
+    return () => {
+      window.removeEventListener('wheel', preventDefault);
+      window.removeEventListener('touchmove', preventDefault);
+      window.removeEventListener('keydown', preventDefaultForScrollKeys);
+      clearTimeout(timer);
+    };
   }, [isLoading]);
 
   return (
-    <div className="bg-[#050505] overflow-x-clip selection:bg-black selection:text-[#E7918A] font-sans text-black">
+    <div className="bg-[#050505] overflow-x-clip selection:bg-white selection:text-[#050505] font-sans text-white">
       
       {/* --- GOLYÓÁLLÓ FONT BEÁLLÍTÁS (Dark Mode) --- */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -396,6 +399,7 @@ export default function RoseLuxury() {
            -webkit-font-smoothing: antialiased;
         }
 
+        /* GLOBÁLIS FONTOK KIKÉNYSZERÍTÉSE */
         body, p, a, button, li, span, div, .font-sans { 
           font-family: 'Work Sans', sans-serif !important; 
         }
@@ -421,7 +425,7 @@ export default function RoseLuxury() {
         )}
       </AnimatePresence>
 
-      {/* --- PRELOADER: NAGY LOGÓ (rose-logo-logo-2.png) --- */}
+      {/* --- PRELOADER KÉPI LOGÓ (Kicsit kisebb arany középút: 300px/150px) --- */}
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -435,7 +439,7 @@ export default function RoseLuxury() {
             <motion.div
               layoutId="main-logo-container"
               transition={logoTransition}
-              className="w-[200px] h-[100px] md:w-[280px] md:h-[140px]"
+              className="w-[220px] h-[110px] md:w-[300px] md:h-[150px]"
             >
               <img src="/rose-logo-logo-2.png" alt="Rose" className="w-full h-full object-contain" />
             </motion.div>
@@ -443,7 +447,7 @@ export default function RoseLuxury() {
         )}
       </AnimatePresence>
 
-      {/* --- STICKY ASZTALFOGLALÁS GOMB (ROSE SZÍN) --- */}
+      {/* --- STICKY ASZTALFOGLALÁS GOMB (ROSE SZÍN, ÁRNYÉK NÉLKÜL) --- */}
       <AnimatePresence>
         {showStickyBtn && (
           <motion.a 
@@ -451,10 +455,10 @@ export default function RoseLuxury() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 15 }}
             transition={{ duration: 0.2 }}
-            href="https://www.sevenrooms.com/explore/turkizrestaurantbudapest/reservations/create/search/"
+            href="https://www.sevenrooms.com/explore/rosemezecocktailbar/reservations/create/search/"
             target="_blank"
             rel="noopener noreferrer"
-            className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[9999] w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#E7918A] text-white hover:bg-white hover:text-black transition-colors duration-300 cursor-pointer block shadow-md"
+            className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[9999] w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#E7918A] text-white hover:bg-white hover:text-black transition-colors duration-300 cursor-pointer block"
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <svg className="w-6 h-6 md:w-6 md:h-6 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -502,19 +506,19 @@ export default function RoseLuxury() {
       {/* --- NAVBAR --- */}
       <nav className={`fixed w-full z-50 transition-all duration-700 ease-[0.22,1,0.36,1] ${isScrolled ? "py-2.5" : "py-6"}`}>
         <div className={`absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-transparent transition-opacity duration-700 ease-out pointer-events-none ${isScrolled ? "opacity-0" : "opacity-100"}`} />
-        <div className={`absolute inset-0 bg-[#050505] transition-opacity duration-700 ease-out pointer-events-none ${isScrolled ? "opacity-100" : "opacity-0"}`} />
+        <div className={`absolute inset-0 bg-[#050505]/90 backdrop-blur-md transition-opacity duration-700 ease-out pointer-events-none border-b border-white/5 ${isScrolled ? "opacity-100" : "opacity-0"}`} />
 
         <div className="relative z-10 max-w-[90rem] mx-auto px-6 lg:px-12 flex justify-between items-center">
           
-          <div className="hidden md:flex flex-1 justify-start space-x-8 lg:space-x-12 text-[13px] md:text-[14px] font-sans tracking-[0.15em] uppercase">
-            <a href="#menu" className="text-white/90 hover:text-white transition-colors duration-500">Kínálatunk</a>
-            <a href="#events" className="text-white/90 hover:text-white transition-colors duration-500">Események</a>
+          <div className="hidden md:flex flex-1 justify-start space-x-8 lg:space-x-12 text-[13px] md:text-[14px] font-sans tracking-[0.15em] uppercase font-medium">
+            <a href="#menu" className="text-white/90 hover:text-[#E7918A] transition-colors duration-500">Kínálatunk</a>
+            <a href="#events" className="text-white/90 hover:text-[#E7918A] transition-colors duration-500">Események</a>
           </div>
 
           <div className="flex-1 md:hidden"></div>
 
-          {/* DINAIMKUS LOGÓ KONTÉNER A NAVBARBAN (NAGY SZÖVEG -> KIS IKON) */}
-          <div className={`relative flex-none transition-all duration-700 ease-[0.22,1,0.36,1] cursor-pointer flex items-center justify-center ${isScrolled ? "w-[50px] h-[50px] md:w-[60px] md:h-[60px]" : "w-[200px] h-[100px] md:w-[280px] md:h-[140px]"}`}>
+          {/* DINAIMKUS LOGÓ KONTÉNER A NAVBARBAN */}
+          <div className={`relative flex-none transition-all duration-700 ease-[0.22,1,0.36,1] cursor-pointer flex items-center justify-center ${isScrolled ? "w-[50px] h-[50px] md:w-[60px] md:h-[60px]" : "w-[220px] h-[110px] md:w-[300px] md:h-[150px]"}`}>
              {!isLoading && (
                <motion.div 
                  layoutId="main-logo-container" 
@@ -535,9 +539,9 @@ export default function RoseLuxury() {
              )}
           </div>
           
-          <div className="hidden md:flex flex-1 justify-end space-x-8 lg:space-x-12 text-[13px] md:text-[14px] font-sans tracking-[0.15em] uppercase items-center">
-            <a href="#reviews" className="text-white/90 hover:text-white transition-colors duration-500">Vélemények</a>
-            <a href="#reservation" className="text-white/90 hover:text-white transition-colors duration-500">Kapcsolat</a>
+          <div className="hidden md:flex flex-1 justify-end space-x-8 lg:space-x-12 text-[13px] md:text-[14px] font-sans tracking-[0.15em] uppercase font-medium items-center">
+            <a href="#reviews" className="text-white/90 hover:text-[#E7918A] transition-colors duration-500">Vélemények</a>
+            <a href="#reservation" className="text-white hover:text-[#E7918A] transition-colors duration-500">Kapcsolat</a>
           </div>
 
           <div className="flex-1 flex justify-end md:hidden">
@@ -555,7 +559,7 @@ export default function RoseLuxury() {
       <section className="relative min-h-screen lg:min-h-screen w-full flex flex-col justify-center items-center px-4 lg:px-16 overflow-hidden bg-[#050505]">
         
         <div className="absolute inset-0 w-full h-full pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-black/50 to-black/35 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-black/40 to-transparent z-10" />
           <motion.img
             initial={{ opacity: 0 }} 
             animate={{ opacity: !isLoading ? 1 : 0 }} 
@@ -576,9 +580,10 @@ export default function RoseLuxury() {
               AZ ESTÉK<br/>ÚJ DIMENZIÓJA
             </motion.h1>
             
+            {/* DUPLA CTA GOMBOK (NINCS RAGYOGÁS) */}
             <motion.div variants={fadeUpReveal} className="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-12 md:mt-16">
               <a 
-                href="https://www.sevenrooms.com/explore/turkizrestaurantbudapest/reservations/create/search/"
+                href="https://www.sevenrooms.com/explore/rosemezecocktailbar/reservations/create/search/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block bg-[#E7918A] text-white px-10 py-4 uppercase font-sans tracking-[0.2em] text-[11px] md:text-[12px] font-bold hover:bg-white hover:text-black transition-colors duration-300 min-w-[220px] text-center"
@@ -586,7 +591,7 @@ export default function RoseLuxury() {
                 Asztalfoglalás
               </a>
               <a 
-                href="https://www.turkizrestaurant.com/assets/documents/turkiz-etlap--2026-05-18.pdf"
+                href="https://qr1.tabpadmenu.com/rosebudapest/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block border border-white/50 text-white px-10 py-4 uppercase font-sans tracking-[0.2em] text-[11px] md:text-[12px] font-bold hover:bg-white hover:text-black transition-colors duration-300 min-w-[220px] text-center"
@@ -610,13 +615,13 @@ export default function RoseLuxury() {
               </p>
             </motion.div>
 
-            {/* GOOGLE ÉRTÉKELÉS (300+, FINOM HOVER ÁTTŰNÉS) */}
+            {/* GOOGLE ÉRTÉKELÉS (LETISZTULT FADE HOVER) */}
             <motion.a 
                href="https://www.google.com/search?sca_esv=cf5c3a640caff83a&cs=1&sxsrf=APpeQnss4SbUY-3vnl12kc1bF5BFZ16QGw:1787136963955&q=ROSE+SHISHA+%26COCKTAIL+BAR+V%C3%A9lem%C3%A9nyek&rflfq=1&num=20&stick=H4sIAAAAAAAAAONgkxIyNjY3NTUzNrA0NLO0NLM0tzDawMj4ilEtyD_YVSHYwzPYw1FBzdnf2TvE0dNHwckxSCHs8Mqc1NzDK_MqU7MXsRKpEACz4COEawAAAA&rldimm=337556309169969782&tbm=lcl&hl=hu-HU&sa=X&ved=2ahUKEwjG75f_w6yWAxUKSvEDHUliJ6QQ9fQKegQIFRAG&biw=1280&bih=832&dpr=1#" 
                target="_blank" 
                rel="noopener noreferrer" 
                variants={fadeUpReveal} 
-               className="order-1 md:order-2 flex flex-col items-center md:items-end gap-1.5 hover:opacity-75 transition-opacity duration-300 cursor-pointer"
+               className="order-1 md:order-2 flex flex-col items-center md:items-end gap-1.5 hover:opacity-70 transition-opacity duration-300 cursor-pointer"
             >
               <div className="flex items-center gap-3">
                 <span className="font-serif text-white text-[28px] md:text-3xl font-bold leading-none">4,7</span>
@@ -647,9 +652,11 @@ export default function RoseLuxury() {
       </section>
 
       {/* ======================================================== */}
-      {/* 1. KÍNÁLATUNK / ÉTLAP - HORIZONTAL SCROLL (DARK THEME) */}
+      {/* 1. KÍNÁLATUNK / ÉTLAP - HORIZONTAL SCROLL (DOBOZOK NÉLKÜL) */}
       {/* ======================================================== */}
-      <section ref={horizontalRef} className="relative h-[300vh] bg-[#050505] w-full">
+      <section id="menu" ref={horizontalRef} className="relative h-[300vh] bg-[#050505] w-full">
+        {/* LÁGY ROSE GLOW A HÁTTÉRBEN */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(231,145,138,0.03),_transparent_70%)] pointer-events-none" />
         <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
           
           <motion.div 
@@ -671,7 +678,7 @@ export default function RoseLuxury() {
                 SIGNATURE <br /> KOKTÉLOK
               </h2>
               <motion.a 
-                 href="https://www.turkizrestaurant.com/assets/documents/turkiz-etlap--2026-05-18.pdf"
+                 href="https://qr1.tabpadmenu.com/rosebudapest/"
                  target="_blank"
                  rel="noopener noreferrer"
                  className="inline-block border border-white/30 text-white px-10 py-4 uppercase font-sans tracking-[0.15em] text-[11px] font-bold hover:bg-[#E7918A] hover:border-[#E7918A] transition-colors duration-500 w-max"
@@ -689,12 +696,12 @@ export default function RoseLuxury() {
                 transition={{ duration: 0.6, delay: 0.1 * (idx % 3) }}
                 className="w-[85vw] sm:w-[50vw] md:w-[450px] lg:w-[550px] flex flex-col group flex-shrink-0 cursor-pointer"
               >
-                <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#111111] shadow-md border border-white/5">
-                  <div className="absolute inset-0 bg-black/10 z-10" />
+                {/* DOBOZ NÉLKÜLI KÉP */}
+                <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#0A0A0A]">
                   <img 
                     src={dish.img} 
                     alt={dish.name} 
-                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out" 
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100" 
                   />
                   <div className="absolute inset-0 bg-[#050505]/60 opacity-0 group-hover:opacity-100 transition-all duration-500 z-20 flex flex-col justify-center items-center p-8 backdrop-blur-sm">
                      <p className="text-white/95 text-center font-sans text-[14px] md:text-[15px] leading-relaxed translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
@@ -703,9 +710,9 @@ export default function RoseLuxury() {
                   </div>
                 </div>
                 
-                <div className="mt-6">
+                <div className="mt-8 transition-transform duration-500 group-hover:pl-4">
                   <h3 className="text-2xl md:text-3xl font-serif text-white uppercase tracking-wide group-hover:text-[#E7918A] transition-colors">{dish.name}</h3>
-                  <p className="text-white/60 font-sans text-[14px] md:text-[15px] mt-2 leading-relaxed">{dish.desc}</p>
+                  <p className="text-white/50 font-sans text-[14px] md:text-[15px] mt-2 leading-relaxed">{dish.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -716,7 +723,7 @@ export default function RoseLuxury() {
       {/* ======================================================== */}
       {/* 2. GASZTRONÓMIA SZEKCIÓ (DARK THEME) */}
       {/* ======================================================== */}
-      <section id="about" className="relative w-full py-28 lg:py-40 bg-[#0A0A0A] px-6 lg:px-16 flex justify-center">
+      <section id="about" className="relative w-full py-28 lg:py-40 bg-[#050505] px-6 lg:px-16 flex justify-center">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
           
           <motion.div 
@@ -728,7 +735,7 @@ export default function RoseLuxury() {
           >
             <div className="relative w-full aspect-[3/4] lg:aspect-square overflow-hidden shadow-2xl bg-[#111111] border border-white/5">
               <div className="absolute inset-0 bg-black/10 z-10" />
-              <img src="/rose1.jpg" alt="Rose Koktélok" className="w-full h-full object-cover" />
+              <img src="/rose8.jpg" alt="Rose Koktélok" className="w-full h-full object-cover" />
             </div>
           </motion.div>
 
@@ -754,14 +761,20 @@ export default function RoseLuxury() {
         </div>
       </section>
 
-      {/* --- ÚJ "MIÉRT MI?" SZEKCIÓ --- */}
+      {/* --- ÚJ "MIÉRT MI?" SZEKCIÓ (VONALAK NÉLKÜL, KIFEJEZETTEBB HÁTTÉRREL) --- */}
       <section id="why-us" className="relative py-28 lg:py-40 bg-[#050505] overflow-hidden">
-        <div className="absolute inset-0 z-0 bg-[#050505]">
-          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-[#050505]/40"></div>
+        <div className="absolute inset-0 z-0">
+          <motion.img 
+            src="/rose4.jpg" 
+            alt="Background Texture" 
+            className="w-full h-full object-cover opacity-40"
+          />
+          <div className="absolute inset-0 bg-[#050505]/60"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]"></div>
         </div>
 
         <div className="relative z-10 max-w-[90rem] mx-auto px-6 lg:px-12">
-          <div className="text-center flex flex-col items-center mb-20">
+          <div className="text-center flex flex-col items-center mb-24">
             <motion.h4 variants={fadeUpReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-[#E7918A] font-sans text-[11px] md:text-[13px] font-bold uppercase tracking-[0.25em] mb-4 md:mb-5">
               Miért Mi?
             </motion.h4>
@@ -770,27 +783,27 @@ export default function RoseLuxury() {
             </motion.h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
-             <motion.div variants={fadeUpReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="flex flex-col items-center text-center">
-                <div className="text-[#E7918A] font-serif text-6xl md:text-7xl mb-6 opacity-30 font-light">01</div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 lg:gap-12">
+             <motion.div variants={fadeUpReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="flex flex-col items-start text-left relative">
+                <div className="text-[#E7918A] font-serif text-5xl md:text-6xl mb-6 font-light">01</div>
                 <h3 className="text-2xl font-serif text-white uppercase tracking-wide mb-4">Kézműves Koktélok</h3>
-                <p className="text-white/70 font-sans text-[14px] md:text-[15px] leading-relaxed max-w-sm">
+                <p className="text-white/60 font-sans text-[14px] md:text-[15px] leading-relaxed">
                   Nemzedékeken átívelő technikák és modern mixológia találkozása. Prémium párlatok, házi szirupok és infúziók minden pohárban.
                 </p>
              </motion.div>
              
-             <motion.div variants={fadeUpReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-col items-center text-center">
-                <div className="text-[#E7918A] font-serif text-6xl md:text-7xl mb-6 opacity-30 font-light">02</div>
+             <motion.div variants={fadeUpReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-col items-start text-left relative">
+                <div className="text-[#E7918A] font-serif text-5xl md:text-6xl mb-6 font-light">02</div>
                 <h3 className="text-2xl font-serif text-white uppercase tracking-wide mb-4">Modern Mezzék</h3>
-                <p className="text-white/70 font-sans text-[14px] md:text-[15px] leading-relaxed max-w-sm">
+                <p className="text-white/60 font-sans text-[14px] md:text-[15px] leading-relaxed">
                   Nem csak az italokra fókuszálunk. Laza, megosztható anatóliai ínyencfalatjaink tökéletesen kísérik az éjszaka ritmusát.
                 </p>
              </motion.div>
              
-             <motion.div variants={fadeUpReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} transition={{ delay: 0.4 }} className="flex flex-col items-center text-center">
-                <div className="text-[#E7918A] font-serif text-6xl md:text-7xl mb-6 opacity-30 font-light">03</div>
+             <motion.div variants={fadeUpReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} transition={{ delay: 0.4 }} className="flex flex-col items-start text-left relative">
+                <div className="text-[#E7918A] font-serif text-5xl md:text-6xl mb-6 font-light">03</div>
                 <h3 className="text-2xl font-serif text-white uppercase tracking-wide mb-4">Exkluzív Atmoszféra</h3>
-                <p className="text-white/70 font-sans text-[14px] md:text-[15px] leading-relaxed max-w-sm">
+                <p className="text-white/60 font-sans text-[14px] md:text-[15px] leading-relaxed">
                   A budapesti éjszaka új fénypontja. Elbűvölő dizájn, kényelmes lounge és pezsgő ritmusok garantálják a prémium élményt.
                 </p>
              </motion.div>
@@ -798,8 +811,8 @@ export default function RoseLuxury() {
         </div>
       </section>
 
-      {/* --- VIP / VENDÉG GALÉRIA (DARK THEME) --- */}
-      <section className="pt-24 pb-32 lg:pt-32 lg:pb-40 bg-[#0A0A0A] overflow-hidden border-t border-white/10">
+      {/* --- VIP / VENDÉG GALÉRIA (VONALAK NÉLKÜL) --- */}
+      <section className="pt-24 pb-32 lg:pt-32 lg:pb-40 bg-[#050505] overflow-hidden">
         <div className="max-w-[90rem] mx-auto px-6 lg:px-12 flex flex-col items-center">
           
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="flex flex-col text-center items-center gap-4 mb-16">
@@ -809,7 +822,7 @@ export default function RoseLuxury() {
             <motion.h2 variants={fadeUpReveal} className="text-4xl md:text-5xl font-serif text-white uppercase">
               KIK JÁRTAK NÁLUNK?
             </motion.h2>
-            <motion.p variants={fadeUpReveal} className="text-white/70 max-w-xl text-[14px] md:text-[15px] font-sans leading-relaxed mt-4">
+            <motion.p variants={fadeUpReveal} className="text-white/60 max-w-xl text-[14px] md:text-[15px] font-sans leading-relaxed mt-4">
               Büszkék vagyunk rá, hogy a ROSE élményt az évek során már számos hazai és nemzetközi ismert személyiség is átélte nálunk.
             </motion.p>
           </motion.div>
@@ -819,6 +832,7 @@ export default function RoseLuxury() {
             whileInView="visible" 
             viewport={{ once: true, margin: "-50px" }} 
             variants={staggerContainer} 
+            /* SZELLŐSEBB GRID, NINCS KERET */
             className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full mb-16"
           >
             {VIP_IMAGES.map((item, idx) => (
@@ -828,23 +842,22 @@ export default function RoseLuxury() {
                 target="_blank"
                 rel="noopener noreferrer"
                 key={idx} 
-                className="group aspect-square relative overflow-hidden bg-[#111111] block cursor-pointer border border-white/5"
+                className="group aspect-square relative overflow-hidden bg-[#111111] block cursor-pointer"
               >
-                <div className="absolute inset-0 bg-[#050505]/0 group-hover:bg-[#050505]/80 transition-colors duration-500 z-10 flex items-center justify-center">
+                <div className="absolute inset-0 bg-[#E7918A]/0 group-hover:bg-[#E7918A]/20 transition-colors duration-500 z-10 flex items-center justify-center">
                   <div className="opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500 ease-out flex flex-col items-center gap-3">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                       <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                       <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                     </svg>
-                    <span className="text-white font-sans text-[10px] tracking-[0.2em] uppercase font-bold">Megtekintés</span>
                   </div>
                 </div>
                 <div className="absolute inset-0 bg-black/20 z-0" />
                 <img 
-                  src={`/vendeg${item.id}.jpg`} 
+                  src={`/rose-vendeg${item.id}.jpg`} 
                   alt={`VIP Guest ${idx + 1}`} 
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out opacity-80 group-hover:opacity-100"
                 />
               </motion.a>
             ))}
@@ -855,7 +868,7 @@ export default function RoseLuxury() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            href="https://www.instagram.com/rosebar_budapest/" 
+            href="https://www.instagram.com/rose_budapest/" 
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center border border-white/30 text-white px-12 py-4 uppercase font-sans tracking-[0.15em] text-[11px] font-bold hover:bg-[#E7918A] hover:border-[#E7918A] transition-colors duration-500"
@@ -866,7 +879,7 @@ export default function RoseLuxury() {
         </div>
       </section>
 
-      {/* --- RENDEZVÉNYEK SZEKCIÓ --- */}
+      {/* --- RENDEZVÉNYEK SZEKCIÓ (PARALLAX ANIMÁCIÓVAL ÉS SZÉLES ALSÓ SÁVVAL) --- */}
       <section id="events" ref={eventsRef} className="relative py-24 lg:py-32 bg-[#050505] overflow-hidden flex flex-col min-h-screen">
         <div className="absolute inset-0 w-full h-full bg-[#050505]">
           <AnimatePresence mode="wait">
@@ -910,7 +923,8 @@ export default function RoseLuxury() {
                     transition={{ duration: 0.4, ease: "easeOut" }}
                   >
                     <div className="flex flex-col md:flex-row md:items-center gap-6 mb-6">
-                       <div className="bg-[#E7918A] text-white flex flex-col items-center justify-center w-[100px] h-[100px] md:w-[120px] md:h-[120px] aspect-square shadow-lg flex-shrink-0">
+                       {/* KEREKÍTÉS NÉLKÜLI (SHARP) DÁTUM DOBOZ */}
+                       <div className="bg-[#E7918A] text-white flex flex-col items-center justify-center w-[100px] h-[100px] md:w-[120px] md:h-[120px] shadow-lg flex-shrink-0">
                          <span className="text-[12px] md:text-[14px] uppercase font-bold tracking-widest opacity-90 mb-1">{EVENTS[activeEvent].year}</span>
                          <span className="text-4xl md:text-5xl font-serif font-bold leading-none mb-1">{EVENTS[activeEvent].day}</span>
                          <span className="text-[12px] md:text-[13px] uppercase font-bold tracking-[0.25em]">{EVENTS[activeEvent].month}</span>
@@ -920,7 +934,7 @@ export default function RoseLuxury() {
                        </h2>
                     </div>
 
-                    <p className="text-white/90 leading-relaxed font-sans text-[15px] md:text-[17px] max-w-lg drop-shadow-md">
+                    <p className="text-white/80 leading-relaxed font-sans text-[15px] md:text-[17px] max-w-lg drop-shadow-md">
                       {EVENTS[activeEvent].desc}
                     </p>
                     
@@ -962,9 +976,12 @@ export default function RoseLuxury() {
         </div>
       </section>
 
-      {/* --- VÉLEMÉNYEK SZEKCIÓ (DARK THEME) --- */}
-      <section id="reviews" className="py-28 lg:py-40 bg-[#0A0A0A] overflow-hidden">
-        <div className="max-w-[90rem] mx-auto px-6 lg:px-12 mb-16 text-center">
+      {/* --- VÉLEMÉNYEK SZEKCIÓ (KÁRTYÁK NÉLKÜL, HATALMAS IDÉZŐJELLEL) --- */}
+      <section id="reviews" className="py-28 lg:py-40 bg-[#050505] overflow-hidden relative">
+        {/* LÁGY ROSE GLOW A HÁTTÉRBEN */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(231,145,138,0.06),_transparent_70%)] pointer-events-none" />
+
+        <div className="relative z-10 max-w-[90rem] mx-auto px-6 lg:px-12 mb-20 text-center">
           <motion.h4 
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -985,33 +1002,36 @@ export default function RoseLuxury() {
           </motion.h2>
         </div>
         
-        <div className="relative w-full overflow-hidden flex items-center py-6">
+        <div className="relative z-10 w-full overflow-hidden flex items-center py-6">
           <motion.div 
             animate={{ x: ["0%", "-50%"] }}
             transition={{ ease: "linear", duration: 95, repeat: Infinity }}
-            className="flex w-max gap-8 md:gap-12 px-6"
+            className="flex w-max gap-16 md:gap-24 px-6"
           >
             {[...REVIEWS, ...REVIEWS].map((review, idx) => (
               <div 
                 key={idx} 
-                className="w-[85vw] sm:w-[500px] md:w-[600px] bg-[#111111] border border-white/5 p-10 md:p-14 flex-shrink-0 flex flex-col justify-between"
+                /* DOBZ ÉS KERET NÉLKÜL, SZABADON LEBEGŐ TEXT */
+                className="w-[85vw] sm:w-[500px] md:w-[600px] flex-shrink-0 flex flex-col justify-between relative"
               >
-                <div>
-                  <div className="flex justify-between items-start mb-8">
-                    <div className="flex gap-2 text-[#E7918A] pt-2">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} className="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                        </svg>
-                      ))}
-                    </div>
-                    <span className="font-serif text-6xl md:text-7xl text-[#E7918A]/30 leading-none select-none">“</span>
+                {/* HATALMAS HÁTTÉR IDÉZŐJEL */}
+                <div className="absolute -top-12 -left-6 font-serif text-[150px] leading-none text-[#E7918A] opacity-10 select-none pointer-events-none">
+                  “
+                </div>
+
+                <div className="relative z-10">
+                  <div className="flex gap-2 text-[#E7918A] mb-8">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                      </svg>
+                    ))}
                   </div>
-                  <p className="text-white/90 font-sans text-[16px] md:text-[18px] leading-relaxed mb-10 font-normal">
+                  <p className="text-white/80 font-sans text-[18px] md:text-[22px] leading-relaxed mb-10 font-normal italic">
                     "{review.text}"
                   </p>
                 </div>
-                <div className="pt-6 flex flex-col">
+                <div className="relative z-10 flex flex-col">
                   <h4 className="text-white font-serif text-2xl font-bold tracking-tight">{review.name}</h4>
                   <p className="text-[#E7918A] font-sans text-[12px] md:text-[13px] uppercase tracking-[0.2em] font-bold mt-1.5">{review.title}</p>
                 </div>
@@ -1024,8 +1044,8 @@ export default function RoseLuxury() {
       {/* SÖTÉT WRAPPER (KAPCSOLAT + TESTVÉRÉTTEREM + LÁBLÉC) */}
       <div className="w-full bg-[#050505] text-white flex flex-col">
 
-        {/* --- KAPCSOLAT SZEKCIÓ --- */}
-        <section id="reservation" className="relative pt-24 lg:pt-32 pb-16 lg:pb-24">
+        {/* --- KAPCSOLAT SZEKCIÓ (VONALAK NÉLKÜLI RÁCS) --- */}
+        <section id="reservation" className="relative pt-24 lg:pt-32 pb-16 lg:pb-24 bg-[#050505]">
           <div className="w-full max-w-[90rem] mx-auto px-6 lg:px-12 text-white">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer} className="flex flex-col items-center">
               
@@ -1034,45 +1054,45 @@ export default function RoseLuxury() {
                   Kapcsolat
                 </motion.h4>
                 <motion.h2 variants={fadeUpReveal} className="text-4xl lg:text-5xl font-serif mb-6 md:mb-8 uppercase">VÁRJUK SZERETETTEL</motion.h2>
-                <motion.p variants={fadeUpReveal} className="text-white/80 font-sans text-[14px] md:text-[15px] leading-relaxed max-w-4xl text-center">
+                <motion.p variants={fadeUpReveal} className="text-white/60 font-sans text-[14px] md:text-[15px] leading-relaxed max-w-4xl text-center">
                   Budapest belvárosának nevezetes háromszögében a Nádor-Vécsey- Báthory utcát körülölelő Vértanúk terénél, a Kossuth Lajos tér szomszédságában található a ROSE étterem. Az 5. kerület szívében, a Parlamenttől néhány méterre, a Lánchídtól 8 perc sétára, a Hősök terétől 5 perc metró útra, a budapesti nemzetközi repülőtértől 15 perc autóútra.
                 </motion.p>
               </div>
 
-              <motion.div variants={fadeUpReveal} className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-8 w-full max-w-6xl mt-8">
+              <motion.div variants={fadeUpReveal} className="flex flex-col lg:flex-row justify-between items-start gap-16 lg:gap-8 w-full max-w-6xl mt-8">
                 
                 <div className="flex-1 flex flex-col items-center text-center w-full">
-                  <p className="mb-2 font-serif text-2xl text-white tracking-wide">Címünk</p>
+                  <p className="mb-6 font-serif text-3xl text-white tracking-wide">Címünk</p>
                   <p className="mb-1 font-sans text-[15px] text-white/70">Elite Meat House</p>
                   <p className="mb-1 font-sans text-[15px] text-white/70">(ROSE Bar)</p>
-                  <p className="mb-8 font-sans text-[15px] text-white/90 font-medium">1051 BUDAPEST Nádor u. 36</p>
-                  <a href="https://goo.gl/maps/82ENcK2az5Rv4q4S8" className="inline-block border border-white/30 text-white px-8 py-3 uppercase font-sans tracking-[0.15em] text-[11px] font-bold hover:bg-white hover:text-black transition-colors duration-300">
+                  <p className="mb-10 font-sans text-[15px] text-white/90 font-medium">1051 BUDAPEST Nádor u. 36</p>
+                  <a href="https://goo.gl/maps/82ENcK2az5Rv4q4S8" className="inline-block border border-white/30 text-white px-10 py-4 uppercase font-sans tracking-[0.15em] text-[11px] font-bold hover:bg-white hover:text-black transition-colors duration-300">
                     Navigáció
                   </a>
                 </div>
 
                 <div className="flex-1 flex flex-col items-center text-center w-full">
-                  <p className="mb-6 font-serif text-2xl text-white tracking-wide">Nyitvatartás</p>
-                  <ul className="space-y-3 text-[14px] md:text-[15px] font-sans text-white/70 w-full max-w-[250px]">
+                  <p className="mb-6 font-serif text-3xl text-white tracking-wide">Nyitvatartás</p>
+                  <ul className="space-y-4 text-[14px] md:text-[15px] font-sans text-white/60 w-full max-w-[250px]">
                     {OPENING_HOURS.map((slot, idx) => (
-                      <li key={idx} className="flex justify-between border-b border-white/10 pb-2 last:border-0 last:pb-0">
+                      <li key={idx} className="flex justify-between">
                         <span>{slot.days}</span>
-                        <span>{slot.hours}</span>
+                        <span className="text-white/90">{slot.hours}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 <div className="flex-1 flex flex-col items-center text-center w-full">
-                  <p className="mb-6 font-serif text-2xl text-white tracking-wide">Elérhetőség</p>
+                  <p className="mb-6 font-serif text-3xl text-white tracking-wide">Elérhetőség</p>
                   <p className="mb-2 font-sans text-[15px] text-white/90">+36 70 366 7666</p>
-                  <p className="mb-8 font-sans text-[14px] text-white/70">reservation@rosebar.com</p>
+                  <p className="mb-10 font-sans text-[14px] text-white/60">reservation@rosebar.com</p>
                   
                   <a 
-                    href="https://www.sevenrooms.com/explore/turkizrestaurantbudapest/reservations/create/search/"
+                    href="https://www.sevenrooms.com/explore/rosemezecocktailbar/reservations/create/search/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block bg-[#E7918A] text-white px-8 py-3 uppercase font-sans tracking-[0.15em] text-[11px] font-bold hover:bg-white hover:text-black transition-colors duration-300"
+                    className="inline-block bg-[#E7918A] text-white px-10 py-4 uppercase font-sans tracking-[0.15em] text-[11px] font-bold hover:bg-white hover:text-black transition-colors duration-300"
                   >
                     Asztalfoglalás
                   </a>
@@ -1089,22 +1109,22 @@ export default function RoseLuxury() {
             <motion.img 
               src="/turkiz1.jpg" 
               alt="Türkiz Restaurant" 
-              className="w-full h-full object-cover" 
+              className="w-full h-full object-cover origin-center" 
               style={{ y: turkizBgY, scale: 1.15 }}
             />
-            <div className="absolute inset-0 bg-black/60 z-10"></div>
+            <div className="absolute inset-0 bg-black/70 z-10"></div>
             <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505] z-10"></div>
           </div>
           
           <div className="relative z-20 max-w-2xl mx-auto px-6 lg:px-12 w-full flex flex-col items-center justify-center text-center">
              
-             {/* TÜRKIZ LOGÓ SZÖVEG HELYETT (SVG Komponens) */}
+             {/* KISEBB TÜRKIZ LOGÓ SZÖVEG HELYETT (SVG Komponens) */}
              <motion.div 
                initial={{ opacity: 0, y: 20 }} 
                whileInView={{ opacity: 1, y: 0 }} 
                transition={{ duration: 1 }} 
                viewport={{once: true}}
-               className="mb-8 w-[150px] h-[200px] md:w-[180px] md:h-[240px] drop-shadow-xl"
+               className="mb-8 w-[90px] h-[120px] md:w-[120px] md:h-[160px] drop-shadow-xl"
              >
                <TurkizLogo isWhite={true} isScrolled={false} />
              </motion.div>
@@ -1114,7 +1134,7 @@ export default function RoseLuxury() {
                whileInView={{ opacity: 1, y: 0 }} 
                transition={{ duration: 1, delay: 0.2 }} 
                viewport={{once: true}}
-               className="text-white/95 text-[14px] md:text-[15px] font-sans leading-relaxed mb-8 drop-shadow-md max-w-xl"
+               className="text-white/80 font-sans text-[14px] md:text-[15px] leading-relaxed mb-8 drop-shadow-md max-w-xl"
              >
                Kezdje az estét egy autentikus anatóliai vacsorával a TÜRKIZ étteremben, mielőtt átadná magát a ROSE utánozhatatlan éjszakai hangulatának.
              </motion.p>
@@ -1125,7 +1145,7 @@ export default function RoseLuxury() {
                transition={{ duration: 1, delay: 0.3 }} 
                viewport={{once: true}}
                href="#" 
-               className="inline-flex items-center justify-center px-8 py-3.5 bg-white text-black hover:bg-[#E7918A] hover:text-white transition-colors duration-300 uppercase tracking-[0.2em] text-[11px] md:text-[12px] whitespace-nowrap font-bold shadow-[0_10px_30px_rgba(0,0,0,0.3)]"
+               className="inline-flex items-center justify-center px-10 py-4 border border-white/30 bg-transparent text-white hover:bg-white hover:text-black transition-colors duration-300 uppercase tracking-[0.2em] text-[11px] md:text-[12px] whitespace-nowrap font-bold"
              >
                Felfedezem a Türkizt
              </motion.a>
@@ -1147,7 +1167,7 @@ export default function RoseLuxury() {
               <a href="#" className="hover:text-white transition-colors whitespace-nowrap">Adatkezelési tájékoztató</a>
             </div>
             
-            <div className="flex flex-col sm:flex-row items-center justify-center xl:justify-end gap-3 text-[10px] md:text-[11px] font-sans tracking-[0.18em] uppercase text-white/50 w-full xl:w-auto">
+            <div className="flex flex-col sm:flex-row items-center justify-center xl:justify-end gap-3 text-[10px] md:text-[11px] font-sans tracking-[0.18em] uppercase text-white/30 w-full xl:w-auto">
               <p className="whitespace-nowrap">&copy; {new Date().getFullYear()} ROSE BAR BUDAPEST</p>
             </div>
           </div>
