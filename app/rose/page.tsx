@@ -1044,8 +1044,8 @@ export default function RoseLuxury() {
       {/* SÖTÉT WRAPPER (KAPCSOLAT + TESTVÉRÉTTEREM + LÁBLÉC) */}
       <div className="w-full bg-[#050505] text-white flex flex-col">
 
-        {/* --- KAPCSOLAT SZEKCIÓ (VONALAK NÉLKÜLI RÁCS) --- */}
-        <section id="reservation" className="relative pt-24 lg:pt-32 pb-16 lg:pb-24 bg-[#050505]">
+{/* --- KAPCSOLAT SZEKCIÓ (VONALAK NÉLKÜLI RÁCS) --- */}
+        <section id="reservation" className="relative pt-24 lg:pt-32 pb-16 lg:pb-24 bg-[#0A0A0A]">
           <div className="w-full max-w-[90rem] mx-auto px-6 lg:px-12 text-white">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer} className="flex flex-col items-center">
               
@@ -1066,33 +1066,43 @@ export default function RoseLuxury() {
                   <p className="mb-1 font-sans text-[15px] text-white/70">Elite Meat House</p>
                   <p className="mb-1 font-sans text-[15px] text-white/70">(ROSE Bar)</p>
                   <p className="mb-10 font-sans text-[15px] text-white/90 font-medium">1051 BUDAPEST Nádor u. 36</p>
-                  <a href="https://goo.gl/maps/82ENcK2az5Rv4q4S8" className="inline-block border border-white/30 text-white px-10 py-4 uppercase font-sans tracking-[0.15em] text-[11px] font-bold hover:bg-white hover:text-black transition-colors duration-300">
+                  <a href="https://goo.gl/maps/82ENcK2az5Rv4q4S8" target="_blank" rel="noopener noreferrer" className="inline-block border border-white/30 text-white px-10 py-4 uppercase font-sans tracking-[0.15em] text-[11px] font-bold hover:bg-white hover:text-black transition-colors duration-300">
                     Navigáció
                   </a>
                 </div>
 
                 <div className="flex-1 flex flex-col items-center text-center w-full">
                   <p className="mb-6 font-serif text-3xl text-white tracking-wide">Nyitvatartás</p>
-                  <ul className="space-y-4 text-[14px] md:text-[15px] font-sans text-white/60 w-full max-w-[250px]">
-                    {OPENING_HOURS.map((slot, idx) => (
-                      <li key={idx} className="flex justify-between">
-                        <span>{slot.days}</span>
-                        <span className="text-white/90">{slot.hours}</span>
-                      </li>
-                    ))}
+                  <ul className="space-y-3 text-[14px] md:text-[15px] font-sans text-white/60 w-full max-w-[250px]">
+                    <li className="flex justify-between"><span>Hétfő</span><span className="text-white/90">12:00 – 24:00</span></li>
+                    <li className="flex justify-between"><span>Kedd</span><span className="text-white/90">12:00 – 24:00</span></li>
+                    <li className="flex justify-between"><span>Szerda</span><span className="text-white/90">12:00 – 24:00</span></li>
+                    <li className="flex justify-between"><span>Csütörtök</span><span className="text-white/90">12:00 – 24:00</span></li>
+                    <li className="flex justify-between"><span>Péntek</span><span className="text-white/90">12:00 – 24:00</span></li>
+                    <li className="flex justify-between"><span>Szombat</span><span className="text-white/90">12:00 – 24:00</span></li>
+                    <li className="flex justify-between"><span>Vasárnap</span><span className="text-white/90">12:00 – 24:00</span></li>
                   </ul>
                 </div>
 
                 <div className="flex-1 flex flex-col items-center text-center w-full">
                   <p className="mb-6 font-serif text-3xl text-white tracking-wide">Elérhetőség</p>
-                  <p className="mb-2 font-sans text-[15px] text-white/90">+36 70 366 7666</p>
-                  <p className="mb-10 font-sans text-[14px] text-white/60">reservation@rosebar.com</p>
+                  <p className="mb-6 font-sans text-[15px] text-white/90">+36 70 615 5540</p>
                   
+                  {/* KÖZÖSSÉGI MÉDIA IKONOK */}
+                  <div className="flex gap-5 mb-10 text-white/70">
+                    <a href="https://www.facebook.com/p/Rose-Budapest-61557349107966/" target="_blank" rel="noopener noreferrer" className="hover:text-[#E7918A] transition-colors" aria-label="Facebook">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                    </a>
+                    <a href="https://www.instagram.com/rose_budapest/" target="_blank" rel="noopener noreferrer" className="hover:text-[#E7918A] transition-colors" aria-label="Instagram">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    </a>
+                  </div>
+
                   <a 
                     href="https://www.sevenrooms.com/explore/rosemezecocktailbar/reservations/create/search/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block bg-[#E7918A] text-white px-10 py-4 uppercase font-sans tracking-[0.15em] text-[11px] font-bold hover:bg-white hover:text-black transition-colors duration-300"
+                    className="inline-block bg-[#E7918A] text-white px-10 py-4 uppercase font-sans tracking-[0.15em] text-[11px] font-bold hover:bg-white hover:text-black transition-colors duration-300 shadow-[0_10px_20px_rgba(231,145,138,0.2)]"
                   >
                     Asztalfoglalás
                   </a>
@@ -1144,7 +1154,7 @@ export default function RoseLuxury() {
                whileInView={{ opacity: 1, y: 0 }} 
                transition={{ duration: 1, delay: 0.3 }} 
                viewport={{once: true}}
-               href="#" 
+               href="/" 
                className="inline-flex items-center justify-center px-10 py-4 border border-white/30 bg-transparent text-white hover:bg-white hover:text-black transition-colors duration-300 uppercase tracking-[0.2em] text-[11px] md:text-[12px] whitespace-nowrap font-bold"
              >
                Felfedezem a Türkizt
