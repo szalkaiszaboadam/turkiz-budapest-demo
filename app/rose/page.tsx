@@ -425,7 +425,7 @@ export default function RoseLuxury() {
         )}
       </AnimatePresence>
 
-      {/* --- PRELOADER KÉPI LOGÓ (Kicsit kisebb arany középút: 300px/150px) --- */}
+{/* --- PRELOADER KÉPI LOGÓ --- */}
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -439,7 +439,8 @@ export default function RoseLuxury() {
             <motion.div
               layoutId="main-logo-container"
               transition={logoTransition}
-              className="w-[220px] h-[110px] md:w-[300px] md:h-[150px]"
+              // Itt nagy a logó
+              className="w-[300px] h-[150px] md:w-[450px] md:h-[220px]"
             >
               <img src="/rose-logo-logo-2.png" alt="Rose" className="w-full h-full object-contain" />
             </motion.div>
@@ -517,8 +518,8 @@ export default function RoseLuxury() {
 
           <div className="flex-1 md:hidden"></div>
 
-          {/* DINAIMKUS LOGÓ KONTÉNER A NAVBARBAN */}
-          <div className={`relative flex-none transition-all duration-700 ease-[0.22,1,0.36,1] cursor-pointer flex items-center justify-center ${isScrolled ? "w-[50px] h-[50px] md:w-[60px] md:h-[60px]" : "w-[220px] h-[110px] md:w-[300px] md:h-[150px]"}`}>
+{/* DINAIMKUS LOGÓ KONTÉNER A NAVBARBAN */}
+          <div className={`relative flex-none transition-all duration-700 ease-[0.22,1,0.36,1] cursor-pointer flex items-center justify-center ${isScrolled ? "w-[50px] h-[50px] md:w-[60px] md:h-[60px]" : "w-[200px] h-[100px] md:w-[280px] md:h-[140px]"}`}>
              {!isLoading && (
                <motion.div 
                  layoutId="main-logo-container" 
